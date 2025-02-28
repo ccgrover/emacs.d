@@ -2,10 +2,22 @@
 #+AUTHOR:    Cullen Grover
 #+EMAIL:     cgrover@redhat.com
 
-* emacs.d
-
-** Getting started
+* Getting started
 
 #+BEGIN_SRC shell
   git clone git@github.com:ccgrover/emacs.d.git ~/.emacs.d
 #+END_SRC
+
+* Roadmap
+
+- [ ] magit
+- [ ] Set up LSP Java
+  - [ ] Tune LSP performance
+  - [ ] Spring boot hooks
+- [ ] Consider other completion options
+  - [ ] Vertico
+  - [ ] Orderless
+  - [ ] Embark
+  - [ ] Consult
+  - [ ] Marginalia
+- [ ] plantuml
