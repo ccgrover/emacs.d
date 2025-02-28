@@ -10,7 +10,7 @@
 
 * Roadmap
 
-- [ ] magit
+- [x] magit
 - [ ] Set up LSP Java
   - [ ] Tune LSP performance
   - [ ] Spring boot hooks
