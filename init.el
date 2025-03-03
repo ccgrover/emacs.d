@@ -5,7 +5,6 @@
 
 ;;; Code:
 
-
 ;; set to 't' for debugging
 (setq debug-on-error t)
 
@@ -37,6 +36,7 @@
 (require 'crafted-ui-packages)
 (require 'crafted-writing-packages)
 
+(require 'cullen-git-packages)
 (require 'cullen-java-packages)
 
 ;; no packages listed after this line will be installed

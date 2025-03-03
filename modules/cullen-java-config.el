@@ -6,10 +6,13 @@
 
 ;;; Code:
 
+(setq lombok-path (expand-file-name "./emacs.d/lombok.jar" (getenv "HOME")))
+(setq lombok-jvm-arg (concat "--jvm-arg=-javaagent:" lombok-path))
+
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-server-programs
                '((java-mode java-ts-mode) .
-                 ("jdtls" "--jvm-arg=-javaagent:/home/cullen/.emacs.d/lombok.jar"
+                 ("jdtls" "--jvm-arg=-javaagent:/home/cgrover/.emacs.d/lombok.jar"
                   :initializationOptions
                   (:settings
                    (:java
@@ -38,6 +41,15 @@
                        "org.junit.Assert.*"
                        "org.junit.Assume.*"
                        ]))))))))
+
+(define-prefix-command 'cullen-java-key-map)
+(keymap-set 'cullen-java-key-map "r" 'eglot-rename)
+(keymap-set 'cullen-java-key-map "a" 'eglot-code-actions)
+(keymap-set 'cullen-java-key-map "e" 'eglot-code-action-extract)
+(keymap-set 'cullen-java-key-map "SPC" 'eglot-code-action-quickfix)
+
+;; 'l' for LSP
+(keymap-global-set "C-c l" 'cullen-java-key-map)
 
 (provide 'cullen-java-config)
 ;;; cullen-java-config.el ends here
