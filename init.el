@@ -1,48 +1,68 @@
 ;;; init.el --- Init! -*- lexical-binding: t -*-
 ;;; Commentary:
 
-;;  My custom init file
+;;  Init file utilizing CraftedEmacs
 
 ;;; Code:
 
-;;  Set up package management
 
-(require 'package)
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives
-             '("gnu"   . "https://elpa.gnu.org/packages/"))
-(package-initialize)
+;; set to 't' for debugging
+(setq debug-on-error t)
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+;; set the location for auto-generated Customizations
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (and custom-file
+           (file-exists-p custom-file))
+  (load custom-file nil :nomessage))
 
-(require 'use-package-ensure)
-(setq use-package-always-ensure t
-      use-package-expand-minimally t)
+;; add my own custom modules to the load path
+(let ((modules (expand-file-name "./modules/" user-emacs-directory)))
+  (when (file-directory-p modules)
+    (message "adding modules to load-path: %s" modules)
+    (add-to-list 'load-path modules)))
 
 ;; backup behavior
 
 (setq backup-directory-alist `(("." . "~/.emacs_file_backups")))
 (setq backup-by-copying-when-linked t)
 
-;; git
+;; init CraftedEmacs
+(load (expand-file-name "modules/crafted-init-config" crafted-emacs-home))
 
-(use-package magit)
+;; add packages to install
+(require 'crafted-completion-packages)
+(require 'crafted-ide-packages)
+(require 'crafted-lisp-packages)
+(require 'crafted-org-packages)
+(require 'crafted-ui-packages)
+(require 'crafted-writing-packages)
 
-;; Customize-generated Lisp...
+(require 'cullen-java-packages)
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes '(leuven-dark))
- '(package-selected-packages '(magit)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;; no packages listed after this line will be installed
+(package-install-selected-packages :noconfirm)
+
+;; now configure the installed packages
+(require 'crafted-defaults-config)
+(require 'crafted-startup-config)
+(require 'crafted-completion-config)
+(require 'crafted-ide-config)
+(require 'crafted-lisp-config)
+(require 'crafted-org-config)
+(require 'crafted-ui-config)
+(require 'crafted-writing-config)
+
+(require 'cullen-defaults-config)
+(require 'cullen-java-config)
+
+;; Ensure hooks / tree-sitter modes are set up
+(crafted-ide-eglot-auto-ensure-all)
+;; Commented due to missing grammars on each startup
+;; (crafted-ide-configure-tree-sitter)
+
+;; tweak this for responsiveness
+(customize-set-variable 'corfu-auto-delay 0.25)
+
+;;; _
+(provide 'init)
+;;; init.el ends here
