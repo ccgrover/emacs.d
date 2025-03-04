@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: Java test snippet
+# key:  test
+# --
+package ${1:`(path-to-java-package)`};
+
+import org.junit.jupiter.api.Test;
+
+class ${2:`(file-name-base
+              (or (buffer-file-name)
+                  (buffer-name)))`} {
+
+    @Test
+    void ${3:testSomething}() {
+        $0
+    }
+}

@@ -34,5 +34,7 @@
 
 (keymap-global-set "C-c f" 'cullen-files-key-map)
 
+(yas-global-mode)
+
 (provide 'cullen-defaults-config)
 ;;; cullen-defaults-config.el ends here

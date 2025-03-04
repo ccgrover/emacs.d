@@ -16,9 +16,9 @@
  '(corfu-cycle t)
  '(crafted-ui-display-line-numbers t)
  '(custom-enabled-themes '(leuven-dark))
- '(dired-auto-revert-buffer t)
- '(dired-dwim-target t)
- '(ediff-window-setup-function 'ediff-setup-windows-plain)
+ '(dired-auto-revert-buffer t t)
+ '(dired-dwim-target t t)
+ '(ediff-window-setup-function 'ediff-setup-windows-plain t)
  '(eglot-autoshutdown t)
  '(eshell-scroll-to-bottom-on-input 'this t)
  '(fancy-splash-image

@@ -22,7 +22,7 @@
 
 ;; backup behavior
 
-(setq backup-directory-alist `(("." . "~/.emacs_file_backups")))
+(setq backup-directory-alist `(("." . "~/.file_backups")))
 (setq backup-by-copying-when-linked t)
 
 ;; init CraftedEmacs

@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: Spring bean
+# key: bean
+# --
+package ${1:`(path-to-java-package)`};
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class ${2:`(file-name-base
+              (or (buffer-file-name)
+                  (buffer-name)))`} {
+
+    $0
+}

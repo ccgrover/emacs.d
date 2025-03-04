@@ -19,3 +19,6 @@ lombok.jar
 recentf
 transient/
 tree-sitter/
+
+tools/
+eshell/lastdir
