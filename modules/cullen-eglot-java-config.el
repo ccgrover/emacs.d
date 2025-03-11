@@ -1,10 +1,17 @@
-;;; cullen-java-config.el --- Config for Java development  -*- lexical-binding: t; -*-
+;;; cullen-eglot-java-config.el --- Config for Java development  -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
-;;  Config for Java development
+;;  Config for Java development using LSP + Eglot
 
 ;;; Code:
+
+;; general Eglot config
+
+;; Ensure hooks / tree-sitter modes are set up
+(crafted-ide-eglot-auto-ensure-all)
+;; Commented due to missing grammars on each startup
+;; (crafted-ide-configure-tree-sitter)
 
 ;; set up LSP
 
@@ -19,7 +26,7 @@
                   (:settings
                    (:java
                     (:completion
-                     (:favoriteStaticMembers   
+                     (:favoriteStaticMembers
                       ["java.util.stream.Collectors.*"
                        "org.awaitility.Awaitility.await"
                        ;; ArchUnit entrypoints
@@ -47,7 +54,7 @@
 
 ;; JUnit test runner
 
-
+;; TODO
 
 ;; define keymaps & keys
 
@@ -61,5 +68,5 @@
 ;; 'l' for LSP
 (keymap-global-set "C-c l" 'cullen-java-key-map)
 
-(provide 'cullen-java-config)
+(provide 'cullen-eglot-java-config)
 ;;; cullen-java-config.el ends here

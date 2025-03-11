@@ -20,6 +20,15 @@
     (message "adding modules to load-path: %s" modules)
     (add-to-list 'load-path modules)))
 
+;; performance config from https://github.com/purcell/emacs.d/blob/master/init.el
+
+;; Adjust garbage collection threshold for early startup
+(setq gc-cons-threshold (* 128 1024 1024))
+
+;; Process performance tuning
+(setq read-process-output-max (* 4 1024 1024))
+(setq process-adaptive-read-buffering nil)
+
 ;; backup behavior
 
 (setq backup-directory-alist `(("." . "~/.file_backups")))
@@ -37,7 +46,8 @@
 (require 'crafted-writing-packages)
 
 (require 'cullen-git-packages)
-(require 'cullen-java-packages)
+(require 'cullen-lsp-java-packages)
+(require 'cullen-performance-packages)
 
 ;; no packages listed after this line will be installed
 (package-install-selected-packages :noconfirm)
@@ -53,15 +63,8 @@
 (require 'crafted-writing-config)
 
 (require 'cullen-defaults-config)
-(require 'cullen-java-config)
-
-;; Ensure hooks / tree-sitter modes are set up
-(crafted-ide-eglot-auto-ensure-all)
-;; Commented due to missing grammars on each startup
-;; (crafted-ide-configure-tree-sitter)
-
-;; tweak this for responsiveness
-(customize-set-variable 'corfu-auto-delay 0.25)
+(require 'cullen-lsp-java-config)
+(require 'cullen-performance-config)
 
 ;;; _
 (provide 'init)

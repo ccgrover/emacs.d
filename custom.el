@@ -19,7 +19,7 @@
  '(dired-auto-revert-buffer t t)
  '(dired-dwim-target t t)
  '(ediff-window-setup-function 'ediff-setup-windows-plain t)
- '(eglot-autoshutdown t)
+ '(eglot-autoshutdown t t)
  '(eshell-scroll-to-bottom-on-input 'this t)
  '(fancy-splash-image
    "/home/cgrover/workspace/crafted-emacs/system-crafters-logo.png")
@@ -31,6 +31,8 @@
  '(load-prefer-newer t t)
  '(marginalia-annotators
    '(marginalia-annotators-heavy marginalia-annotators-light nil) t)
+ '(markdown-enable-html t)
+ '(markdown-enable-math t)
  '(org-hide-emphasis-markers t t)
  '(org-link-descriptive t t)
  '(org-mouse-1-follows-link t t)
