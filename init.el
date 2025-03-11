@@ -47,7 +47,6 @@
 
 (require 'cullen-git-packages)
 (require 'cullen-lsp-java-packages)
-(require 'cullen-performance-packages)
 
 ;; no packages listed after this line will be installed
 (package-install-selected-packages :noconfirm)

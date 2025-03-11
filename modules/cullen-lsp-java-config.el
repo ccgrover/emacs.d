@@ -54,6 +54,10 @@
 (add-hook 'java-mode-hook #'lsp)
 (dap-auto-configure-mode)
 
+;; define Java formatting options
+(setq lsp-java-format-insert-spaces t)
+(setq-default indent-tabs-mode nil)
+
 ;; define keymaps & keys
 
 ;; 't' is for test!
@@ -71,6 +75,9 @@
 
 ;; 'l' for LSP or language!
 (keymap-global-set "C-c l" 'cullen-java-key-map)
+
+;; performance tweaks
+(setq lsp-idle-delay 0.250)
 
 (provide 'cullen-lsp-java-config)
 ;;; cullen-lsp-java-config.el ends here
