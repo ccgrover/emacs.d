@@ -12,11 +12,14 @@
   (message "JVM arg: %s" lombok-jvm-arg)
   (setq lsp-java-vmargs
         (list
-         ;; "-noverify"
-         "-Xmx4G"
-         ;; "-Xms100m"
-         ;; "-XX:+UseG1GC"
-         ;; "-XX:+UseStringDeduplication"
+         ;; performance recommendations from https://github.com/eclipse-jdtls/eclipse.jdt.ls/issues/1469
+         "-XX:+UseParallelGC"
+         "-XX:GCTimeRatio=4"
+         "-XX:AdaptiveSizePolicyWeight=90"
+         "-Dsun.zip.disableMemoryMapping=true"
+         "-Xmx8G"
+         "-Xms100m"
+         "-XX:+UseStringDeduplication"
          lombok-jvm-arg)))
 
 (setq favorite-static-members
@@ -48,17 +51,14 @@
 
 (setq lsp-java-configuration-runtimes
       '[(:name "JavaSE-17"
-         :path (substitute-in-file-name "$HOME/.sdkman/candidates/java/17.0.13-tem")
+         :path "~/.sdkman/candidates/java/17.0.13-tem"
          :default t)])
 
 (add-hook 'java-mode-hook #'lsp)
-(dap-auto-configure-mode)
 
 ;; define Java formatting options
 (setq lsp-java-format-insert-spaces t)
 (setq-default indent-tabs-mode nil)
-
-;; define keymaps & keys
 
 ;; 't' is for test!
 (define-prefix-command 'cullen-java-test-key-map)
@@ -73,8 +73,7 @@
 (keymap-set 'cullen-java-key-map "d" 'lsp-goto-type-definition)
 (keymap-set 'cullen-java-key-map "t" 'cullen-java-test-key-map)
 
-;; 'l' for LSP or language!
-(keymap-global-set "C-c l" 'cullen-java-key-map)
+(keymap-global-set "C-l" 'cullen-java-key-map)
 
 ;; performance tweaks
 (setq lsp-idle-delay 0.250)

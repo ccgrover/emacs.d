@@ -1,8 +1,8 @@
-;;; cullen-defaults-config.el --- Generic config -*- lexical-binding: t; -*-
+;;; cullen-generic-config.el --- Generic config -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
-;;  My default/generic config items
+;;  My generic config items
 
 ;;; Code:
 
@@ -42,5 +42,9 @@
 ;; tweak this for completion responsiveness
 (customize-set-variable 'corfu-auto-delay 0.25)
 
-(provide 'cullen-defaults-config)
-;;; cullen-defaults-config.el ends here
+;; https://github.com/purcell/exec-path-from-shell?tab=readme-ov-file#usage
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
+
+(provide 'cullen-generic-config)
+;;; cullen-generic-config.el ends here

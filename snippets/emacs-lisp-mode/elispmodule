@@ -1,0 +1,12 @@
+;;; ${1:`(file-name-nondirectory (buffer-file-name))`} --- ${2:<Quick desc>} -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;  ${3:<Commentary here>}
+
+;;; Code:
+
+$0
+
+(provide '${4:`(file-name-base)`})
+;;; $1 ends here

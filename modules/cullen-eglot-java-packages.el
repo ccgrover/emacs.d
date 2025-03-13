@@ -8,5 +8,5 @@
 
 (add-to-list 'package-selected-packages 'java-mode)
 
-(provide 'cullen-java-packages)
-;;; cullen-java-packages.el ends here
+(provide 'cullen-eglot-java-packages)
+;;; cullen-eglot-java-packages.el ends here

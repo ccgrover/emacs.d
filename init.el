@@ -45,7 +45,9 @@
 (require 'crafted-ui-packages)
 (require 'crafted-writing-packages)
 
-(require 'cullen-git-packages)
+;; (require 'cullen-eglot-java-packages)(
+(require 'cullen-generic-packages)
+(require 'cullen-lsp-packages)
 (require 'cullen-lsp-java-packages)
 
 ;; no packages listed after this line will be installed
@@ -61,9 +63,12 @@
 (require 'crafted-ui-config)
 (require 'crafted-writing-config)
 
-(require 'cullen-defaults-config)
-(require 'cullen-lsp-java-config)
+(require 'cullen-generic-config)
 (require 'cullen-performance-config)
+
+;; (require 'cullen-eglot-java-config)
+(require 'cullen-lsp-config)
+(require 'cullen-lsp-java-config)
 
 ;;; _
 (provide 'init)
