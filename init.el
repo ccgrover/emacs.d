@@ -25,10 +25,6 @@
 ;; Adjust garbage collection threshold for early startup
 (setq gc-cons-threshold (* 128 1024 1024))
 
-;; Process performance tuning
-(setq read-process-output-max (* 4 1024 1024))
-(setq process-adaptive-read-buffering nil)
-
 ;; backup behavior
 
 (setq backup-directory-alist `(("." . "~/.file_backups")))
@@ -41,11 +37,10 @@
 (require 'crafted-completion-packages)
 (require 'crafted-ide-packages)
 (require 'crafted-lisp-packages)
-(require 'crafted-org-packages)
 (require 'crafted-ui-packages)
 (require 'crafted-writing-packages)
 
-;; (require 'cullen-eglot-java-packages)(
+;; (require 'cullen-eglot-java-packages)
 (require 'cullen-generic-packages)
 (require 'cullen-lsp-packages)
 (require 'cullen-lsp-java-packages)
@@ -59,11 +54,11 @@
 (require 'crafted-completion-config)
 (require 'crafted-ide-config)
 (require 'crafted-lisp-config)
-(require 'crafted-org-config)
 (require 'crafted-ui-config)
 (require 'crafted-writing-config)
 
 (require 'cullen-generic-config)
+(require 'cullen-org-config)
 (require 'cullen-performance-config)
 
 ;; (require 'cullen-eglot-java-config)

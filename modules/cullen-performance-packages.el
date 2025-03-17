@@ -6,8 +6,5 @@
 
 ;;; Code:
 
-(add-to-list 'package-selected-packages 'gcmh)
-(add-to-list 'package-selected-packages 'diminish)
-
 (provide 'cullen-performance-packages)
 ;;; cullen-performance-packages.el ends here

@@ -49,10 +49,10 @@
 
 (setq lsp-java-completion-favorite-static-members favorite-static-members)
 
-(setq lsp-java-configuration-runtimes
-      '[(:name "JavaSE-17"
-         :path "~/.sdkman/candidates/java/17.0.13-tem"
-         :default t)])
+;; (setq lsp-java-configuration-runtimes
+;;       '[(:name "JavaSE-17"
+;;          :path "~/.sdkman/candidates/java/17.0.13-tem"
+;;          :default t)])
 
 (add-hook 'java-mode-hook #'lsp)
 
@@ -73,10 +73,10 @@
 (keymap-set 'cullen-java-key-map "d" 'lsp-goto-type-definition)
 (keymap-set 'cullen-java-key-map "t" 'cullen-java-test-key-map)
 
-(keymap-global-set "C-l" 'cullen-java-key-map)
+(keymap-global-set "C-c l" 'cullen-java-key-map)
 
 ;; performance tweaks
-(setq lsp-idle-delay 0.250)
+(setq lsp-idle-delay nil)
 
 (provide 'cullen-lsp-java-config)
 ;;; cullen-lsp-java-config.el ends here

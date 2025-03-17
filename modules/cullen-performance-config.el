@@ -1,4 +1,4 @@
-;;; cullen-performance-config.el --- GCMH config -*- lexical-binding: t; -*-
+;;; cullen-performance-config.el --- Performance config -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
@@ -8,6 +8,7 @@
 
 (setq gc-cons-threshold (* 100 1024 1024)) ;; 100mb
 (setq read-process-output-max (* 10 1024 1024)) ;; 10mb
+(setq process-adaptive-read-buffering nil)
 
 (provide 'cullen-performance-config)
 ;;; cullen-performance-config.el ends here

@@ -12,8 +12,6 @@
 
 ;; define keymaps & keys
 
-(define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-
 ;; emacs-lsp-booster
 ;; https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-mode
 
