@@ -22,3 +22,11 @@ tree-sitter/
 
 tools/
 eshell/lastdir
+
+.cache/
+.dap-breakpoints
+.lsp-session-v1
+bookmarks
+eclipse.jdt.ls/
+session.*
+workspace/
