@@ -6,6 +6,12 @@
 
 ;;; Code:
 
+;;  code lenses
+
+(add-hook 'java-mode-hook #'lsp)
+(add-hook 'lsp-mode-hook #'lsp-lens-mode)
+(add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
+
 ;; set up LSP
 
 (let ((lombok-jvm-arg (concat "-javaagent:" (expand-file-name "./tools/lombok.jar" user-emacs-directory))))
@@ -53,8 +59,6 @@
 ;;       '[(:name "JavaSE-17"
 ;;          :path "~/.sdkman/candidates/java/17.0.13-tem"
 ;;          :default t)])
-
-(add-hook 'java-mode-hook #'lsp)
 
 ;; define Java formatting options
 (setq lsp-java-format-insert-spaces t)

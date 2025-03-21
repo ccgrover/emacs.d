@@ -6,7 +6,7 @@
 ;;; Code:
 
 ;; set to 't' for debugging
-(setq debug-on-error t)
+(setq debug-on-error nil)
 
 ;; set the location for auto-generated Customizations
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -25,11 +25,6 @@
 ;; Adjust garbage collection threshold for early startup
 (setq gc-cons-threshold (* 128 1024 1024))
 
-;; backup behavior
-
-(setq backup-directory-alist `(("." . "~/.file_backups")))
-(setq backup-by-copying-when-linked t)
-
 ;; init CraftedEmacs
 (load (expand-file-name "modules/crafted-init-config" crafted-emacs-home))
 
@@ -40,7 +35,6 @@
 (require 'crafted-ui-packages)
 (require 'crafted-writing-packages)
 
-;; (require 'cullen-eglot-java-packages)
 (require 'cullen-generic-packages)
 (require 'cullen-lsp-packages)
 (require 'cullen-lsp-java-packages)
@@ -50,6 +44,7 @@
 
 ;; now configure the installed packages
 (require 'crafted-defaults-config)
+(require 'crafted-updates-config)
 (require 'crafted-startup-config)
 (require 'crafted-completion-config)
 (require 'crafted-ide-config)
@@ -60,8 +55,6 @@
 (require 'cullen-generic-config)
 (require 'cullen-org-config)
 (require 'cullen-performance-config)
-
-;; (require 'cullen-eglot-java-config)
 (require 'cullen-lsp-config)
 (require 'cullen-lsp-java-config)
 

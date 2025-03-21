@@ -10,6 +10,11 @@
 
 (dap-auto-configure-mode)
 
+;; where Flycheck shows errors
+
+(setq-default flycheck-indication-mode 'left-margin)
+(add-hook 'flycheck-mode-hook #'flycheck-set-indication-mode)
+
 ;; define keymaps & keys
 
 ;; emacs-lsp-booster

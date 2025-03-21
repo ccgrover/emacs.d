@@ -7,6 +7,7 @@
 ;;; Code:
 
 (add-to-list 'package-selected-packages 'lsp-java)
+(add-to-list 'package-selected-packages 'lsp-java-boot)
 (add-to-list 'package-selected-packages 'dap-java)
 
 (provide 'cullen-lsp-java-packages)
