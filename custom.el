@@ -36,8 +36,8 @@
      "25e6582a412ac989daead9b20d39c5c242b840bca2d3a451083320e156fec239"
      "9bd9318216a3cde3969eab52f9480bd9db0686af9649d80d5711da9c162a19e3"
      default))
- '(dired-auto-revert-buffer t)
- '(dired-dwim-target t)
+ '(dired-auto-revert-buffer t t)
+ '(dired-dwim-target t t)
  '(ediff-window-setup-function 'ediff-setup-windows-plain t)
  '(eglot-autoshutdown t t)
  '(eshell-scroll-to-bottom-on-input 'this t)
@@ -55,13 +55,24 @@
    '(marginalia-annotators-heavy marginalia-annotators-light nil) t)
  '(markdown-enable-html t)
  '(markdown-enable-math t)
- '(org-hide-emphasis-markers t)
- '(org-link-descriptive t)
- '(org-mouse-1-follows-link t)
- '(org-return-follows-link t)
+ '(org-hide-emphasis-markers t t)
+ '(org-link-descriptive t t)
+ '(org-mouse-1-follows-link t t)
+ '(org-return-follows-link t t)
  '(package-archive-priorities
    '(("gnu" . 99) ("nongnu" . 80) ("stable" . 70) ("melpa" . 0)))
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(aggressive-indent all-the-icons breadcrumb cape cider clj-refactor
+                       clojure-mode consult corfu corfu-terminal
+                       dap-java dap-mode editorconfig elisp-demos
+                       embark embark-consult exec-path-from-shell
+                       faff-Theme flycheck flycheck-clojure geiser
+                       geiser-guile geiser-racket helpful
+                       ibuffer-project lsp-java lsp-mode lsp-ui
+                       marginalia markdown-mode modus-themes orderless
+                       package-lint package-lint-flymake pandoc-mode
+                       sly sly-asdf sly-quicklisp sly-repl-ansi-color
+                       treesit-auto vertico yaml yaml-pro))
  '(scheme-program-name "guile" t)
  '(scroll-conservatively 101)
  '(scroll-margin 0)

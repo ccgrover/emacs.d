@@ -8,6 +8,8 @@
 
 ;; backup behavior
 
+(setq backup-directory-alist `(("." . "~/.file_backups")))
+(setq backup-by-copying-when-linked t)
 
 ;; shortcuts to visit common files
 
