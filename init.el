@@ -1,12 +1,17 @@
 ;;; init.el --- Init! -*- lexical-binding: t -*-
 ;;; Commentary:
 
-;;  Init file utilizing CraftedEmacs
+;;  My init file!
 
 ;;; Code:
 
 ;; set to 't' for debugging
 (setq debug-on-error nil)
+
+;; backup behavior
+
+(setq backup-directory-alist `(("." . "~/.file_backups")))
+(setq backup-by-copying-when-linked t)
 
 ;; set the location for auto-generated Customizations
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -25,38 +30,8 @@
 ;; Adjust garbage collection threshold for early startup
 (setq gc-cons-threshold (* 128 1024 1024))
 
-;; init CraftedEmacs
-(load (expand-file-name "modules/crafted-init-config" crafted-emacs-home))
-
-;; add packages to install
-(require 'crafted-completion-packages)
-(require 'crafted-ide-packages)
-(require 'crafted-lisp-packages)
-(require 'crafted-ui-packages)
-(require 'crafted-writing-packages)
-
-(require 'cullen-generic-packages)
-(require 'cullen-lsp-packages)
-(require 'cullen-lsp-java-packages)
-
-;; no packages listed after this line will be installed
-(package-install-selected-packages :noconfirm)
-
-;; now configure the installed packages
-(require 'crafted-defaults-config)
-(require 'crafted-updates-config)
-(require 'crafted-startup-config)
-(require 'crafted-completion-config)
-(require 'crafted-ide-config)
-(require 'crafted-lisp-config)
-(require 'crafted-ui-config)
-(require 'crafted-writing-config)
-
-(require 'cullen-generic-config)
-(require 'cullen-org-config)
-(require 'cullen-performance-config)
-(require 'cullen-lsp-config)
-(require 'cullen-lsp-java-config)
+;; actually load the modules
+(require 'cullen-lsp)
 
 ;;; _
 (provide 'init)
