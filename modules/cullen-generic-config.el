@@ -65,11 +65,6 @@
 
 ;; appearance
 
-(require-theme 'modus-themes)
-(load-theme 'modus-vivendi :no-confirm)
-(define-key global-map (kbd "<f5>") #'modus-themes-toggle)
-(enable-theme 'modus-vivendi)
-
 ;; tree-sitter grammars
 
 (setq treesit-language-source-alist
