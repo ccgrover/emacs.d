@@ -20,6 +20,10 @@
 
 (setq-default indent-tabs-mode nil)
 
+;; display line numbers for all programming modes
+
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
 ;; git
 
 (use-package magit)
