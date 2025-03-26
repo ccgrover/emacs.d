@@ -1,8 +1,8 @@
-;;; cullen-org-config.el --- Org mode config -*- lexical-binding: t; -*-
+;;; my-org.el --- org-mode config -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
-;;  My personal org-mode config items
+;;  org-mode configuration
 
 ;;; Code:
 
@@ -17,5 +17,5 @@
 
 (keymap-global-set "C-c o" 'cullen-org-key-map)
 
-(provide 'cullen-org-config)
-;;; cullen-org-config.el ends here
+(provide 'my-org)
+;;; my-org.el ends here
