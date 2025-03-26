@@ -14,8 +14,15 @@
 ;; appearance
 
 (use-package modus-themes
+  :config (load-theme 'modus-vivendi t)
+  (enable-theme 'modus-vivendi))
+
+;; https://protesilaos.com/emacs/modus-themes#h:e979734c-a9e1-4373-9365-0f2cd36107b8
+(use-package modus-themes
+  :ensure t
   :bind ("<f5>" . modus-themes-toggle)
-  :config (load-theme 'modus-vivendi :no-confirm))
+  :config
+  (load-theme 'modus-vivendi t))
 
 (provide 'my-misc)
 ;;; my-misc.el ends here
