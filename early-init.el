@@ -1,23 +1,32 @@
 ;;; early-init.el --- (Early) init! -*- lexical-binding: t -*-
 ;;; Commentary:
 
-;;  Early init stuff.
+;;  Early init stuff. Mostly taken from the CraftedEmacs early-init module
 
 ;;; Code:
 
-;;  package setup
+;;  envvar for LSP performance
+(setenv "LSP_USE_PLISTS" "true")
+
+;; package setup
+
 (require 'package)
 
-(setq use-package-always-ensure t)
-
-;;; Setup Emacs Lisp Package Archives (ELPAs)
-;; where to get packages to install
 (add-to-list 'package-archives '("stable" . "https://stable.melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
-;;  envvar for LSP performance
+(customize-set-variable 'package-archive-priorities
+                        '(("gnu"    . 99)   ; prefer GNU packages
+                          ("nongnu" . 80)   ; use non-gnu packages if
+                                            ; not found in GNU elpa
+                          ("stable" . 70)   ; prefer "released" versions
+                                            ; from melpa
+                          ("melpa"  . 0)))  ; if all else fails, get it
+				            ; from melpa
 
-(setenv "LSP_USE_PLISTS" "true")
+(package-initialize)
+(package-refresh-contents)
+(setq use-package-always-ensure t)
 
 ;;; _
 (provide 'early-init)

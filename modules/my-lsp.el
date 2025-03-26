@@ -78,9 +78,7 @@
   :commands dap-auto-configure-mode)
 (use-package dap-java
   :ensure nil)
-(use-package helm-lsp)
-(use-package helm
-  :commands helm-mode)
+(use-package consult-lsp)
 (use-package lsp-treemacs)
 
 (provide 'my-lsp)

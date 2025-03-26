@@ -6,6 +6,11 @@
 
 ;;; Code:
 
+;; TODO move this
+
+;;; Setup Emacs Lisp Package Archives (ELPAs)
+;; where to get packages to install
+
 ;; backup behavior
 
 (setq backup-directory-alist `(("." . "~/.file_backups")))
@@ -13,18 +18,21 @@
 
 ;; git
 
-(use-package magit)
+(use-package magit
+  :ensure t)
 
 ;; appearance
 
-(use-package modus-themes
-  :config (load-theme 'modus-vivendi t)
-  (enable-theme 'modus-vivendi))
-
 ;; https://protesilaos.com/emacs/modus-themes#h:e979734c-a9e1-4373-9365-0f2cd36107b8
+;;; For packaged versions which must use `require'.
 (use-package modus-themes
+  :defer nil ;; necessary since ":bind" implies "defer t"
   :bind ("<f5>" . modus-themes-toggle)
-  :config (load-theme 'modus-vivendi t))
+  ;; I prefer this warmer palette; can't use ":custom" since it relies on a package var
+  :config (setq modus-themes-common-palette-overrides modus-themes-preset-overrides-warmer)
+  ;; Load the theme of your choice.
+  (load-theme 'modus-vivendi :no-confirm)
+  (define-key global-map (kbd "<f5>") #'modus-themes-toggle))
 
 (provide 'my-misc)
 ;;; my-misc.el ends here
