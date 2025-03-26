@@ -13,7 +13,8 @@
 (use-package yasnippet
   :commands yas-global-mode)
 (use-package lsp-mode
-  :hook (lsp-mode . lsp-enable-which-key-integration))
+  :hook (lsp-mode . lsp-enable-which-key-integration)
+  :custom (lsp-idle-delay nil))
 (use-package hydra)
 (use-package company)
 (use-package lsp-ui)
