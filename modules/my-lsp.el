@@ -12,11 +12,24 @@
   :custom (flycheck-indication-mode 'left-margin))
 (use-package yasnippet
   :commands yas-global-mode)
+
 (use-package lsp-mode
+  :bind-keymap ("C-c l" . lsp-command-map)
+  :custom
+  (lsp-completion-provider :none) ;; we use Corfu!
+  :init
+  (defun my/lsp-mode-setup-completion ()
+    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+          '(orderless))
+    ;; Optionally configure the cape-capf-buster.
+    (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point))))
+
+  :hook (lsp-completion-mode . my/lsp-mode-setup-completion)
   :hook (lsp-mode . lsp-enable-which-key-integration)
   :custom (lsp-idle-delay nil))
+
 (use-package hydra)
-(use-package company)
+
 (use-package lsp-ui)
 (use-package which-key
   :commands which-key-mode)

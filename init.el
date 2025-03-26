@@ -26,6 +26,7 @@
 ;; LOAD MY MODULES
 
 (require 'my-misc)
+(require 'my-completion)
 (require 'my-lsp)
 
 ;;; _
