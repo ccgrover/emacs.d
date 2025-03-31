@@ -25,6 +25,7 @@
 
 ;; LOAD MY MODULES
 
+(require 'my-appearance)
 (require 'my-misc)
 (require 'my-completion)
 (require 'my-org)

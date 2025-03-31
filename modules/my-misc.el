@@ -20,32 +20,16 @@
 
 (setq-default indent-tabs-mode nil)
 
-;; display line numbers for all programming modes
-
-(add-hook 'prog-mode-hook 'display-line-numbers-mode)
-
 ;; git
 
 (use-package magit)
-
-;; appearance
-
-;; https://protesilaos.com/emacs/modus-themes#h:e979734c-a9e1-4373-9365-0f2cd36107b8
-;;; For packaged versions which must use `require'.
-(use-package modus-themes
-  :defer nil ;; necessary since ":bind" implies "defer t"
-  :bind ("<f5>" . modus-themes-toggle)
-  ;; I prefer this warmer palette; can't use ":custom" since it relies on a package var
-  :config (setq modus-themes-common-palette-overrides modus-themes-preset-overrides-warmer)
-  ;; Load the theme of your choice.
-  (load-theme 'modus-vivendi :no-confirm)
-  (define-key global-map (kbd "<f5>") #'modus-themes-toggle))
 
 ;; tree-sitter grammars
 
 (setq treesit-language-source-alist
    '((bash "https://github.com/tree-sitter/tree-sitter-bash")
      (cmake "https://github.com/uyha/tree-sitter-cmake")
+     (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
      (css "https://github.com/tree-sitter/tree-sitter-css")
      (elisp "https://github.com/Wilfred/tree-sitter-elisp")
      (go "https://github.com/tree-sitter/tree-sitter-go")
