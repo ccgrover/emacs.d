@@ -14,11 +14,15 @@
 
 ;; LSP packages
 
-(use-package projectile)
+(use-package projectile
+  :custom (projectile-create-missing-test-files t))
 
 (use-package flycheck
+  :defer nil
+  :bind ("<f5>" . flycheck-buffer)
   :hook (flycheck-mode . flycheck-set-indication-mode)
-  :custom (flycheck-indication-mode 'left-margin))
+  :custom (flycheck-indication-mode 'left-margin)
+  :config (global-flycheck-mode))
 
 (use-package yasnippet
   :config (yas-global-mode))
@@ -45,6 +49,8 @@
 
 (use-package lsp-java
   :hook (java-mode . lsp)
+        (lsp-mode . lsp-lens-mode)
+        (java-mode . lsp-java-boot-lens-mode)
   :config
   (let ((lombok-jvm-arg (concat "-javaagent:" (expand-file-name "./tools/lombok.jar" user-emacs-directory))))
     (setq lsp-java-vmargs
@@ -83,10 +89,6 @@
        "org.mockito.Answers.*"
        "org.junit.Assert.*"
        "org.junit.Assume.*"]))
-
-(use-package lsp-java-boot
-  :hook (lsp-mode . lsp-lens-mode)
-        (java-mode . lsp-java-boot-lens-mode))
 
 (use-package dap-mode
   :after lsp-mode

@@ -5,8 +5,14 @@
 
 ;;; Code:
 
-;; set to 't' for debugging
-(setq debug-on-error nil)
+;; debug with "emacs --debug-init"
+(if init-file-debug
+    (setq use-package-verbose t
+          use-package-expand-minimally nil
+          use-package-compute-statistics t
+          debug-on-error t)
+  (setq use-package-verbose nil
+        use-package-expand-minimally t))
 
 ;; set the location for auto-generated Customizations
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))

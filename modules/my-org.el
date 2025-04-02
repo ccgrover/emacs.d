@@ -15,6 +15,10 @@
 (keymap-set 'cullen-org-key-map "l" #'org-todo-list)
 (keymap-set 'cullen-org-key-map "c" #'org-capture)
 
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((plantuml . t))) ; this line activates plantuml
+
 (keymap-global-set "C-c o" 'cullen-org-key-map)
 
 (provide 'my-org)

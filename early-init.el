@@ -11,6 +11,7 @@
 ;; package setup
 
 (require 'package)
+(require 'use-package-ensure)
 
 (add-to-list 'package-archives '("stable" . "https://stable.melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))

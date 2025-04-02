@@ -12,16 +12,13 @@
 
 ;; themes
 
-;; https://protesilaos.com/emacs/modus-themes#h:e979734c-a9e1-4373-9365-0f2cd36107b8
-;;; For packaged versions which must use `require'.
-(use-package modus-themes
+(use-package ef-themes
+  :ensure t
   :defer nil ;; necessary since ":bind" implies "defer t"
-  :bind ("<f5>" . modus-themes-toggle)
-  ;; I prefer this warmer palette; can't use ":custom" since it relies on a package var
-  :config (setq modus-themes-common-palette-overrides modus-themes-preset-overrides-warmer)
-  ;; Load the theme of your choice.
-  (load-theme 'modus-vivendi :no-confirm)
-  (define-key global-map (kbd "<f5>") #'modus-themes-toggle))
+  :bind ("<f7>" . ef-themes-rotate)
+  :bind ("<f8>" . ef-themes-toggle)
+  :config
+  (ef-themes-select 'ef-dream))
 
 (provide 'my-appearance)
 ;;; my-appearance.el ends here
