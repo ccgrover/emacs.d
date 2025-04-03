@@ -31,6 +31,7 @@
   :bind-keymap ("C-c l" . lsp-command-map)
   :custom (lsp-completion-provider :none) ;; we use Corfu!
   :custom (lsp-idle-delay nil)
+  :custom (lsp-disabled-clients '(semgrep-ls))
   :init
   (defun my/lsp-mode-setup-completion ()
     (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
@@ -64,6 +65,7 @@
          "-Xms100m"
          "-XX:+UseStringDeduplication"
          lombok-jvm-arg)))
+  :custom (lsp-java-maven-download-sources t)
   :custom (lsp-java-format-insert-spaces t)
   :custom (lsp-java-completion-favorite-static-members
       ["java.util.stream.Collectors.*"
