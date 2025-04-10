@@ -35,7 +35,7 @@
 (require 'my-misc)
 (require 'my-completion)
 (require 'my-org)
-(require 'my-lsp)
+(require 'my-eglot)
 (require 'my-yaml)
 
 ;;; _

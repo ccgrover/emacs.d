@@ -9,6 +9,8 @@
 ;; display line numbers for all programming modes
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(add-hook 'yaml-mode-hook 'display-line-numbers-mode)
+(add-hook 'yaml-ts-mode-hook 'display-line-numbers-mode)
 
 ;; themes
 

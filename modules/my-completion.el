@@ -47,15 +47,11 @@
 (use-package vertico
   :init (vertico-mode 1))
 
-;; https://github.com/minad/corfu/wiki#configuring-corfu-for-lsp-mode
 (use-package orderless
   :init
-  ;; Tune the global completion style settings to your liking!
-  ;; This affects the minibuffer and non-lsp completion at point.
-  (setq completion-styles '(orderless partial-completion basic)
-        completion-category-defaults nil
-        completion-category-overrides nil))
-
+   ;; Tune the global completion style settings to your liking!
+   ;; This affects the minibuffer and non-lsp completion at point.
+   (setq completion-styles '(orderless partial-completion basic)))
 
 (provide 'my-completion)
 ;;; my-completion.el ends here
