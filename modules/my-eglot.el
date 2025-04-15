@@ -74,7 +74,7 @@
   "Set up modes want in 'java-mode'."
   (eglot-ensure)
   (auto-fill-mode)
-  (flycheck-mode)
+  (flymake-mode)
   (subword-mode)
   (yas-minor-mode)
   (when window-system
@@ -89,6 +89,9 @@
 
 (use-package projectile
   :custom (projectile-create-missing-test-files t))
+
+(use-package yasnippet
+  :config (yas-global-mode))
 
 ;; _
 (provide 'my-eglot)
