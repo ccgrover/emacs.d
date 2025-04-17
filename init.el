@@ -32,6 +32,7 @@
 ;; LOAD MY MODULES
 
 (require 'my-appearance)
+(require 'my-completion)
 (require 'my-misc)
 (require 'my-org)
 (require 'my-lsp)

@@ -33,5 +33,12 @@
 (use-package tree-sitter-langs
   :config (tree-sitter-require 'yaml))
 
+;; save minibuffer history
+
+(use-package savehist
+  :ensure nil
+  :init
+  (savehist-mode))
+
 (provide 'my-misc)
 ;;; my-misc.el ends here

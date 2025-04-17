@@ -39,6 +39,7 @@
                '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                  nil
                  (window-parameters (mode-line-format . none)))))
+
 ;; Consult users will also want the embark-consult package.
 (use-package embark-consult
   :hook (embark-collect-mode . consult-preview-at-point-mode))

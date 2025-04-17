@@ -30,20 +30,24 @@
 (use-package lsp-mode
   :bind-keymap ("C-c l" . lsp-command-map)
   :bind (:map lsp-mode-map
-              (("\C-\M-g" . lsp-find-implementation)
+              (("C-M-g" . lsp-find-implementation)
                ("M-RET" . lsp-execute-code-action)))
   :custom ((lsp-idle-delay nil)
            (lsp-disabled-clients '(semgrep-ls))
            (lsp-enable-file-watchers nil)
-           (lsp-headerline-breadcrumb-enable nil))
+           (lsp-headerline-breadcrumb-enable nil)
+           (lsp-completion-provider :none))
+  :init
+  (defun my/lsp-mode-setup-completion ()
+    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+          '(orderless))
+    ;; Optionally configure the cape-capf-buster.
+    (setq-local completion-at-point-functions
+                (list (cape-capf-buster #'lsp-completion-at-point))))
+  :hook (lsp-completion-mode . my/lsp-mode-setup-completion)
   :hook (lsp-mode . lsp-enable-which-key-integration))
 
 (use-package hydra)
-
-(use-package company
-  :config
-  (global-set-key (kbd "<C-return>") 'company-complete)
-  (global-company-mode 1))
 
 (use-package lsp-ui)
 
@@ -101,9 +105,10 @@
 (use-package dap-java
   :ensure nil)
 
-(use-package helm-lsp)
-(use-package helm
-  :config (helm-mode))
+(use-package consult-lsp
+  :defer nil
+  :config (define-key lsp-mode-map [remap xref-find-apropos] #'consult-lsp-symbols))
+
 (use-package lsp-treemacs)
 
 (use-package lsp-sonarlint
