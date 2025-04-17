@@ -33,9 +33,8 @@
 
 (require 'my-appearance)
 (require 'my-misc)
-(require 'my-completion)
 (require 'my-org)
-(require 'my-eglot)
+(require 'my-lsp)
 (require 'my-yaml)
 
 ;;; _

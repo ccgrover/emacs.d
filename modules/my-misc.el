@@ -6,10 +6,13 @@
 
 ;;; Code:
 
-;; TODO move this
+;; automatically revert buffers that change behind Emacs' back
 
-;;; Setup Emacs Lisp Package Archives (ELPAs)
-;; where to get packages to install
+(global-auto-revert-mode)
+
+;; do not create lockfiles
+
+(setq create-lockfiles nil)
 
 ;; backup behavior
 
