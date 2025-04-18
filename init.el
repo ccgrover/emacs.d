@@ -5,14 +5,8 @@
 
 ;;; Code:
 
-;; debug with "emacs --debug-init"
-(if init-file-debug
-    (setq use-package-verbose t
-          use-package-expand-minimally nil
-          use-package-compute-statistics t
-          debug-on-error t)
-  (setq use-package-verbose nil
-        use-package-expand-minimally t))
+;; set to t for debugging
+(setq debug-on-error nil)
 
 ;; set the location for auto-generated Customizations
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -31,10 +25,16 @@
 
 ;; LOAD MY MODULES
 
+(defgroup my-emacs nil
+  "Custom variables used within this config and its modules."
+  :group 'emacs
+  :prefix "my-")
+
 (require 'my-appearance)
 (require 'my-completion)
 (require 'my-misc)
 (require 'my-org)
+(require 'my-markdown)
 (require 'my-lsp)
 (require 'my-yaml)
 

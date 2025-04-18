@@ -5,10 +5,18 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(dap-java-hot-reload 'never)
- '(package-selected-packages nil))
+ '(my-java-formatter-settings
+   "/home/cgrover/tools/eclipseformatter/eclipse-java-google-style.xml")
+ '(my-lombok-path "/home/cgrover/tools/lombok/lombok.jar")
+ '(package-selected-packages
+   '(cape company consult-lsp corfu-terminal dape ef-themes
+          embark-consult flycheck lsp-java lsp-sonarlint lsp-ui magit
+          marginalia multiple-cursors orderless projectile
+          tree-sitter-langs vertico yaml-mode yasnippet)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Fira Code" :foundry "CTDB" :slant normal :weight medium :height 102 :width normal)))))
+ '(default ((t (:family "Fira Code" :foundry "CTDB" :slant normal :weight medium :height 102 :width normal))))
+ '(vertico-group-title ((t (:inherit bold :foreground "#8fcfd0" :height 1.5 :family "Macondo Swash Caps")))))

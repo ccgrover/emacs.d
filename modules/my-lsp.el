@@ -6,6 +6,17 @@
 
 ;;; Code:
 
+;; variables used within this config
+(defcustom my-lombok-path nil
+  "Path to lombok.jar for JDTLS to use."
+  :type '(string)
+  :group 'my-emacs)
+
+(defcustom my-java-formatter-settings nil
+  "Path to lombok.jar for JDTLS to use."
+  :type '(string)
+  :group 'my-emacs)
+
 ;; generic performance-related config
 
 (setq gc-cons-threshold (* 100 1024 1024)) ;; 100mb
@@ -15,7 +26,9 @@
 ;; LSP packages
 
 (use-package projectile
-  :custom (projectile-create-missing-test-files t))
+  :custom (projectile-create-missing-test-files t)
+  )
+
 
 (use-package flycheck
   :defer nil
@@ -59,8 +72,11 @@
         (lsp-mode . lsp-lens-mode)
         (java-mode . lsp-java-boot-lens-mode)
   :config
-  (let ((lombok-jvm-arg (concat "-javaagent:" (expand-file-name "./tools/lombok.jar" user-emacs-directory))))
+  (let ((lombok-jvm-arg (concat "-javaagent:" my-lombok-path))
+        (format-settings-uri (concat "file:" my-java-formatter-settings)))
     (setq
+     lsp-java-maven-download-sources t
+     lsp-java-format-settings-url format-settings-uri
      lsp-java-vmargs
      (list
       ;; performance recommendations from https://github.com/eclipse-jdtls/eclipse.jdt.ls/issues/1469
@@ -72,7 +88,6 @@
       "-Xms100m"
       "-XX:+UseStringDeduplication"
       lombok-jvm-arg)
-     lsp-java-maven-download-sources t
      lsp-java-completion-favorite-static-members
      ["java.util.stream.Collectors.*"
       "org.awaitility.Awaitility.await"
