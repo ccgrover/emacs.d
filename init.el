@@ -6,7 +6,7 @@
 ;;; Code:
 
 ;; set to t for debugging
-(setq debug-on-error nil)
+(setq debug-on-error t)
 
 ;; set the location for auto-generated Customizations
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -24,6 +24,12 @@
 (setq gc-cons-threshold (* 128 1024 1024))
 
 ;; LOAD MY MODULES
+
+(use-package auto-package-update
+  :config
+  (setq auto-package-update-delete-old-versions t)
+  (setq auto-package-update-hide-results nil)
+  (auto-package-update-maybe))
 
 (defgroup my-emacs nil
   "Custom variables used within this config and its modules."

@@ -26,12 +26,11 @@
 ;; LSP packages
 
 (use-package projectile
-  :custom (projectile-create-missing-test-files t)
-  )
-
+  :custom (projectile-create-missing-test-files t))
 
 (use-package flycheck
   :defer nil
+  ;; manually refresh buffer due to no lsp-idle-delay
   :bind ("<f5>" . flycheck-buffer)
   :hook (flycheck-mode . flycheck-set-indication-mode)
   :custom (flycheck-indication-mode 'left-margin)
@@ -68,9 +67,11 @@
   :config (which-key-mode))
 
 (use-package lsp-java
-  :hook (java-mode . lsp)
-        (lsp-mode . lsp-lens-mode)
-        (java-mode . lsp-java-boot-lens-mode)
+  ;; use melpa over melpa-stable for newer features
+  :pin melpa
+  :hook ((java-mode . lsp)
+         (lsp-mode . lsp-lens-mode)
+         (java-mode . lsp-java-boot-lens-mode))
   :config
   (let ((lombok-jvm-arg (concat "-javaagent:" my-lombok-path))
         (format-settings-uri (concat "file:" my-java-formatter-settings)))
@@ -122,6 +123,7 @@
 
 (use-package consult-lsp
   :defer nil
+  :bind ("C-c b" . consult-project-buffer)
   :config (define-key lsp-mode-map [remap xref-find-apropos] #'consult-lsp-symbols))
 
 (use-package lsp-treemacs)
@@ -129,6 +131,5 @@
 (use-package lsp-sonarlint
   :custom (lsp-sonarlint-auto-download t))
 
-;; _
 (provide 'my-lsp)
 ;;; my-lsp.el ends here

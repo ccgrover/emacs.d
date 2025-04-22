@@ -40,5 +40,9 @@
   :init
   (savehist-mode))
 
+;; enable repeat mode!
+
+(repeat-mode 1)
+
 (provide 'my-misc)
 ;;; my-misc.el ends here
