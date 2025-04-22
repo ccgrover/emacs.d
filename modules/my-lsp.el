@@ -72,6 +72,15 @@
   :hook ((java-mode . lsp)
          (lsp-mode . lsp-lens-mode)
          (java-mode . lsp-java-boot-lens-mode))
+  ;; null analysis including JSpecify annotations
+  ;; use setq instead of :custom so we can just append
+  :config (setq lsp-java-compile-null-analysis-mode "automatic"
+                lsp-java-compile-null-analysis-nonnull
+                 (vconcat lsp-java-compile-null-analysis-nonnull
+                          '("org.jspecify.annotations.NonNull"))
+                lsp-java-compile-null-analysis-nullable
+                 (vconcat lsp-java-compile-null-analysis-nullable
+                          '("org.jspecify.annotations.Nullable")))
   :config
   (let ((lombok-jvm-arg (concat "-javaagent:" my-lombok-path))
         (format-settings-uri (concat "file:" my-java-formatter-settings)))
