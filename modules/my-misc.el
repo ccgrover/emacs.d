@@ -23,6 +23,10 @@
 
 (setq-default indent-tabs-mode nil)
 
+;; aggressive indent mode for elisp
+(use-package aggressive-indent
+  :hook (emacs-lisp-mode . aggressive-indent-mode))
+
 ;; git
 
 (use-package magit)

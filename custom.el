@@ -5,15 +5,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(dap-java-hot-reload 'never)
+ '(lisp-indent-offset nil)
  '(my-java-formatter-settings
    "/home/cgrover/tools/eclipseformatter/eclipse-java-google-style.xml")
  '(my-lombok-path "/home/cgrover/tools/lombok/lombok.jar")
- '(package-selected-packages
-   '(async auto-package-update cape company consult-lsp corfu-terminal
-           dape ef-themes embark-consult flycheck lsp-java
-           lsp-sonarlint lsp-ui magit marginalia multiple-cursors
-           orderless projectile tree-sitter-langs vertico wfnames
-           yaml-mode yasnippet)))
+ '(package-selected-packages nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -64,7 +64,8 @@
 (use-package lsp-ui)
 
 (use-package which-key
-  :config (which-key-mode))
+  :config
+  (which-key-mode))
 
 (use-package lsp-java
   ;; use melpa over melpa-stable for newer features
@@ -72,73 +73,74 @@
   :hook ((java-mode . lsp)
          (lsp-mode . lsp-lens-mode)
          (java-mode . lsp-java-boot-lens-mode))
-  ;; null analysis including JSpecify annotations
-  ;; use setq instead of :custom so we can just append
-  :config (setq lsp-java-compile-null-analysis-mode "automatic"
-                lsp-java-compile-null-analysis-nonnull
-                 (vconcat lsp-java-compile-null-analysis-nonnull
-                          '("org.jspecify.annotations.NonNull"))
-                lsp-java-compile-null-analysis-nullable
-                 (vconcat lsp-java-compile-null-analysis-nullable
-                          '("org.jspecify.annotations.Nullable")))
+  ;; use setq instead of :custom so we can just append to vector variables
   :config
-  (let ((lombok-jvm-arg (concat "-javaagent:" my-lombok-path))
-        (format-settings-uri (concat "file:" my-java-formatter-settings)))
-    (setq
-     lsp-java-maven-download-sources t
-     lsp-java-format-settings-url format-settings-uri
-     lsp-java-vmargs
-     (list
-      ;; performance recommendations from https://github.com/eclipse-jdtls/eclipse.jdt.ls/issues/1469
-      "-XX:+UseParallelGC"
-      "-XX:GCTimeRatio=4"
-      "-XX:AdaptiveSizePolicyWeight=90"
-      "-Dsun.zip.disableMemoryMapping=true"
-      "-Xmx8G"
-      "-Xms100m"
-      "-XX:+UseStringDeduplication"
-      lombok-jvm-arg)
-     lsp-java-completion-favorite-static-members
-     ["java.util.stream.Collectors.*"
-      "org.awaitility.Awaitility.await"
-      ;; ArchUnit entrypoints
-      "com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*"
-      "com.tngtech.archunit.library.Architectures.*"
-      ;; Spring test utilities
-      "org.springframework.test.web.client.match.MockRestRequestMatchers.*"
-      "org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*"
-      "org.springframework.test.web.servlet.result.MockMvcResultMatchers.*"
-      "org.springframework.test.web.servlet.result.MockMvcResultHandlers.*"
-      ;; HATEOAS
-      "org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*"
-      ;; other common testing libraries
-      "org.assertj.core.api.Assertions.*"
-      "org.assertj.core.api.Assumptions.*"
-      "org.junit.jupiter.api.Assertions.*"
-      "org.junit.jupiter.api.Assumptions.*"
-      "org.junit.jupiter.params.provider.Arguments.*"
-      "org.mockito.Mockito.*"
-      "org.mockito.ArgumentMatchers.*"
-      "org.mockito.Answers.*"
-      "org.junit.Assert.*"
-      "org.junit.Assume.*"])))
+  (setq
+   lsp-java-maven-download-sources t
+   ;; null analysis including JSpecify annotations
+   lsp-java-compile-null-analysis-mode "automatic"
+   lsp-java-compile-null-analysis-nonnull
+   (vconcat '("org.jspecify.annotations.NonNull")
+            lsp-java-compile-null-analysis-nonnull)
+   lsp-java-compile-null-analysis-nullable
+   (vconcat '("org.jspecify.annotations.Nullable")
+            lsp-java-compile-null-analysis-nullable)
+   ;; Eclipse formatter settings
+   lsp-java-format-settings-url (concat "file:" my-java-formatter-settings)
+   ;; VM args for performance and lombok
+   ;; https://github.com/eclipse-jdtls/eclipse.jdt.ls/issues/1469
+   lsp-java-vmargs
+   (list "-XX:+UseParallelGC"
+         "-XX:GCTimeRatio=4"
+         "-XX:AdaptiveSizePolicyWeight=90"
+         "-Dsun.zip.disableMemoryMapping=true"
+         "-Xmx8G"
+         "-Xms100m"
+         "-XX:+UseStringDeduplication"
+         (concat "-javaagent:" my-lombok-path))
+   ;; customize static imports for completion
+   lsp-java-completion-favorite-static-members
+   (vconcat '(
+              ;; Spring testing utilities
+              "org.springframework.test.web.client.match.MockRestRequestMatchers.*"
+              "org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*"
+              "org.springframework.test.web.servlet.result.MockMvcResultMatchers.*"
+              "org.springframework.test.web.servlet.result.MockMvcResultHandlers.*"
+              ;; Spring HATEOAS
+              "org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*"
+              ;; Other utilities
+              "java.util.stream.Collectors.*"
+              "org.awaitility.Awaitility.await"
+              ;; ArchUnit entrypoints
+              "com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*"
+              "com.tngtech.archunit.library.Architectures.*"
+              ;; other common testing libraries
+              "org.assertj.core.api.Assertions.*"
+              "org.assertj.core.api.Assumptions.*"
+              "org.junit.jupiter.params.provider.Arguments.*"
+              )
+            lsp-java-completion-favorite-static-members)))
 
 (use-package dap-mode
   :after lsp-mode
   :config (dap-auto-configure-mode))
 
 (use-package dap-java
-  :ensure nil)
+  :ensure
+  nil)
 
 (use-package consult-lsp
   :defer nil
   :bind ("C-c b" . consult-project-buffer)
-  :config (define-key lsp-mode-map [remap xref-find-apropos] #'consult-lsp-symbols))
+  :config
+  (define-key lsp-mode-map [remap xref-find-apropos]
+              #'consult-lsp-symbols))
 
 (use-package lsp-treemacs)
 
 (use-package lsp-sonarlint
-  :custom (lsp-sonarlint-auto-download t))
+  :custom
+  (lsp-sonarlint-auto-download t))
 
 (provide 'my-lsp)
 ;;; my-lsp.el ends here

@@ -44,15 +44,17 @@
 (use-package embark-consult
   :hook (embark-collect-mode . consult-preview-at-point-mode))
 (use-package marginalia
-  :init (marginalia-mode 1))
+  :config (marginalia-mode 1))
 (use-package vertico
-  :init (vertico-mode 1))
+  :init (vertico-mode 1)
+  ;; https://github.com/oantolin/embark?tab=readme-ov-file#selecting-commands-via-completions-instead-of-key-bindings
+  )
 
 (use-package orderless
   :init
-   ;; Tune the global completion style settings to your liking!
-   ;; This affects the minibuffer and non-lsp completion at point.
-   (setq completion-styles '(orderless partial-completion basic)))
+  ;; Tune the global completion style settings to your liking!
+  ;; This affects the minibuffer and non-lsp completion at point.
+  (setq completion-styles '(orderless partial-completion basic)))
 
 (provide 'my-completion)
 ;;; my-completion.el ends here
