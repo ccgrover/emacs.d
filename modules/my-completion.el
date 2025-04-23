@@ -15,8 +15,10 @@
   ;; consider adding more cape functions
   (add-hook 'completion-at-point-functions #'cape-dabbrev)
   (add-hook 'completion-at-point-functions #'cape-file))
+
 (use-package consult
   :init (setq completion-in-region-function #'consult-completion-in-region))
+
 (use-package corfu
   :init (global-corfu-mode 1)
   :init (global-completion-preview-mode)
@@ -24,7 +26,9 @@
   :custom (corfu-auto t)         ; Enable auto completion
   :custom (corfu-auto-prefix 2)  ; Complete with less prefix keys
   )
+
 (use-package corfu-terminal)
+
 (use-package embark
   :bind
   (("C-." . embark-act)         ;; pick some comfortable binding
@@ -38,16 +42,29 @@
   (add-to-list 'display-buffer-alist
                '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                  nil
-                 (window-parameters (mode-line-format . none)))))
+                 (window-parameters (mode-line-format . none))))
+  (setq embark-indicators
+        '(embark-minimal-indicator  ; default is embark-mixed-indicator
+          embark-highlight-indicator
+          embark-isearch-highlight-indicator)
+        embark-prompter 'embark-completing-read-prompter)
+  )
 
 ;; Consult users will also want the embark-consult package.
 (use-package embark-consult
+  :after (embark consult)
   :hook (embark-collect-mode . consult-preview-at-point-mode))
+
 (use-package marginalia
   :config (marginalia-mode 1))
+
 (use-package vertico
   :init (vertico-mode 1)
+  :after embark ;; below category includes embark
   ;; https://github.com/oantolin/embark?tab=readme-ov-file#selecting-commands-via-completions-instead-of-key-bindings
+  :config
+  (vertico-multiform-mode)
+  (add-to-list 'vertico-multiform-categories '(embark-keybinding grid))
   )
 
 (use-package orderless

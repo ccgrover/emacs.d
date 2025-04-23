@@ -56,16 +56,11 @@
     ;; Optionally configure the cape-capf-buster.
     (setq-local completion-at-point-functions
                 (list (cape-capf-buster #'lsp-completion-at-point))))
-  :hook (lsp-completion-mode . my/lsp-mode-setup-completion)
-  :hook (lsp-mode . lsp-enable-which-key-integration))
+  :hook (lsp-completion-mode . my/lsp-mode-setup-completion))
 
 (use-package hydra)
 
 (use-package lsp-ui)
-
-(use-package which-key
-  :config
-  (which-key-mode))
 
 (use-package lsp-java
   ;; use melpa over melpa-stable for newer features
