@@ -20,10 +20,8 @@
                         '(("gnu"    . 99)   ; prefer GNU packages
                           ("nongnu" . 80)   ; use non-gnu packages if
                                             ; not found in GNU elpa
-                          ("stable" . 70)   ; prefer "released" versions
-                                            ; from melpa
-                          ("melpa"  . 0)))  ; if all else fails, get it
-				            ; from melpa
+                          ("melpa"  . 70)   ; prefer most updated
+                          ("stable" . 0)))  ; fall back to stable
 
 (setq use-package-always-ensure t)
 
