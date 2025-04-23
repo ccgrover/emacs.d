@@ -56,7 +56,12 @@
     ;; Optionally configure the cape-capf-buster.
     (setq-local completion-at-point-functions
                 (list (cape-capf-buster #'lsp-completion-at-point))))
-  :hook (lsp-completion-mode . my/lsp-mode-setup-completion))
+  :hook (lsp-completion-mode . my/lsp-mode-setup-completion)
+  :hook (lsp-mode . lsp-enable-which-key-integration))
+
+(use-package which-key
+  :ensure nil ; build-in for Emacs 30+
+  :config (which-key-mode))
 
 (use-package hydra)
 
@@ -121,8 +126,7 @@
   :config (dap-auto-configure-mode))
 
 (use-package dap-java
-  :ensure
-  nil)
+  :ensure nil)
 
 (use-package consult-lsp
   :defer nil
