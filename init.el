@@ -6,7 +6,7 @@
 ;;; Code:
 
 ;; set to t for debugging
-(setq debug-on-error t)
+(setq debug-on-error nil)
 
 ;; set the location for auto-generated Customizations
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))

@@ -6,6 +6,9 @@
 
 ;;; Code:
 
+;; 'y' or 'n'
+(setq use-short-answers t)
+
 ;; automatically revert buffers that change behind Emacs' back
 
 (global-auto-revert-mode)

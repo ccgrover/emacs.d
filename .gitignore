@@ -30,3 +30,8 @@ bookmarks
 eclipse.jdt.ls/
 session.*
 workspace/
+/.last-package-update-day
+/.mc-lists.el
+/org-roam.db
+/projectile-bookmarks.eld
+/tramp
