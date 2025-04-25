@@ -27,13 +27,26 @@
   (keymap-set 'my-org-mode-map "c" #'org-capture)
   (keymap-global-set "C-c o" 'my-org-mode-map))
 
-(use-package org-roam
-  :custom (org-roam-directory my-org-directory)
+;; https://protesilaos.com/emacs/denote
+(use-package denote
+  :ensure t
+  :hook (dired-mode . denote-dired-mode)
+  :bind
+  (("C-c n n" . denote)
+   ("C-c n r" . denote-rename-file)
+   ("C-c n l" . denote-link)
+   ("C-c n b" . denote-backlinks)
+   ("C-c n d" . denote-dired)
+   ("C-c n g" . denote-grep))
   :config
-  (setq org-roam-capture-templates
-        '(("p" "Generic pages" plain
-           (file "/home/cgrover/.emacs.d/templates/org-roam/pages.org")
-           :target (file "pages/${slug}.org")))))
+  (setq denote-directory (expand-file-name "notes" my-org-directory))
+
+  ;; Automatically rename Denote buffers when opening them so that
+  ;; instead of their long file name they have, for example, a literal
+  ;; "[D]" followed by the file's title.  Read the doc string of
+  ;; `denote-rename-buffer-format' for how to modify this.
+  (denote-rename-buffer-mode 1))
+
 
 (provide 'my-org)
 ;;; my-org.el ends here

@@ -35,3 +35,4 @@ workspace/
 /org-roam.db
 /projectile-bookmarks.eld
 /tramp
+/.org-id-locations
