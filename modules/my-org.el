@@ -2,21 +2,20 @@
 
 ;;; Commentary:
 
-;;  org-mode configuration
+;;  Packages for note-taking, ft org-mode.
 
 ;;; Code:
 
-(defcustom my-org-directory "~/workspace/cullen-org/"
-  "Directory containing my org files."
+(defcustom my-notes-directory "~/notes/"
+  "Directory containing my notes."
   :type '(string)
   :group 'my-emacs)
 
 (use-package org
   :ensure nil ; built-in
-  :custom (org-directory my-org-directory)
-  :custom (org-agenda-files '(".")) ;; relative to org-directory
-  :custom (org-default-notes-file
-           (concat org-directory "todo.org"))
+  :custom (org-directory my-notes-directory)
+  :custom (org-agenda-files
+           (list org-directory))
   :config (org-babel-do-load-languages
            'org-babel-load-languages
            '((plantuml . t))) ; this line activates plantuml
@@ -29,25 +28,44 @@
 
 ;; https://protesilaos.com/emacs/denote
 (use-package denote
-  :ensure t
   :hook (dired-mode . denote-dired-mode)
   :bind
   (("C-c n n" . denote)
    ("C-c n r" . denote-rename-file)
    ("C-c n l" . denote-link)
    ("C-c n b" . denote-backlinks)
-   ("C-c n d" . denote-dired)
-   ("C-c n g" . denote-grep))
+   ("C-c n d" . denote-dired))
   :config
-  (setq denote-directory (expand-file-name "notes" my-org-directory))
-  (setq denote-known-keywords '("emacs"))
-
-  ;; Automatically rename Denote buffers when opening them so that
-  ;; instead of their long file name they have, for example, a literal
-  ;; "[D]" followed by the file's title.  Read the doc string of
-  ;; `denote-rename-buffer-format' for how to modify this.
+  (setq denote-directory my-notes-directory)
+  ;; so TODOs appear in the agenda list
+  (push denote-directory org-agenda-files)
+  ;; Renames buffer to "[D] <title>", instead of the scary name
   (denote-rename-buffer-mode 1))
 
+(use-package consult-denote
+  :bind
+  (("C-c n f" . consult-denote-find)
+   ("C-c n g" . consult-denote-grep))
+  :config
+  (consult-denote-mode 1))
+
+(use-package denote-journal
+  :defer nil
+  :bind
+  (("C-c j j" . denote-journal-new-or-existing-entry)
+   ("C-c j n" . denote-journal-new-entry)
+   ("C-c j l" . denote-journal-link-or-create-entry))
+  :hook (calendar-mode . denote-journal-calendar-mode)
+  :config
+  ;; Use the "journal" subdirectory of `my-notes-directory'.
+  (setq denote-journal-directory
+        (expand-file-name "journal" my-notes-directory))
+  ;; so TODOs appear in the agenda list
+  (push denote-journal-directory org-agenda-files)
+  ;; Default keyword for new journal entries.
+  (setq denote-journal-keyword "journal")
+  ;; Read the doc string of `denote-journal-title-format'.
+  (setq denote-journal-title-format 'day))
 
 (provide 'my-org)
 ;;; my-org.el ends here

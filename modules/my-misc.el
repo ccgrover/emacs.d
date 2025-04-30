@@ -22,6 +22,10 @@
 (setq backup-directory-alist `(("." . "~/.file_backups")))
 (setq backup-by-copying-when-linked t)
 
+;; CSV support
+
+(use-package csv-mode)
+
 ;; spaces, not tabs
 
 (setq-default indent-tabs-mode nil)
