@@ -16,6 +16,7 @@
   :custom (org-directory my-notes-directory)
   :custom (org-agenda-files
            (list org-directory))
+  :custom (denote-date-prompt-use-org-read-date t)
   :config (org-babel-do-load-languages
            'org-babel-load-languages
            '((plantuml . t))) ; this line activates plantuml
@@ -36,7 +37,7 @@
    ("C-c n b" . denote-backlinks)
    ("C-c n d" . denote-dired))
   :config
-  (setq denote-directory my-notes-directory)
+  (setq denote-directory (expand-file-name "notes" my-notes-directory))
   ;; so TODOs appear in the agenda list
   (push denote-directory org-agenda-files)
   ;; Renames buffer to "[D] <title>", instead of the scary name
