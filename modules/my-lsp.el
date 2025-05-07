@@ -25,6 +25,8 @@
 
 ;; LSP packages
 
+(use-package ag)
+
 (use-package projectile
   :init
   :custom ((projectile-create-missing-test-files t)
