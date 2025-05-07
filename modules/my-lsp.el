@@ -26,7 +26,15 @@
 ;; LSP packages
 
 (use-package projectile
-  :custom (projectile-create-missing-test-files t))
+  :init
+  :custom ((projectile-create-missing-test-files t)
+           (projectile-project-search-path '("~/workspace/"))
+           (projectile-auto-cleanup-known-projects t)
+           (projectile-sort-order 'recently-active))
+  :config
+  (define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map)
+  (global-set-key (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode +1))
 
 (use-package flycheck
   :defer nil
