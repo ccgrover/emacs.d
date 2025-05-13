@@ -27,6 +27,11 @@
   (keymap-set 'my-org-mode-map "c" #'org-capture)
   (keymap-global-set "C-c o" 'my-org-mode-map))
 
+(defun my/set-denote-dir (orig-fun &rest args)
+  "Call ORIG-FUN with ARGS after setting denote-use-directory to the 'pages' subdir."
+  (let ((denote-use-directory (expand-file-name "pages" denote-directory)))
+    (apply orig-fun args)))
+
 ;; https://protesilaos.com/emacs/denote
 (use-package denote
   :hook (dired-mode . denote-dired-mode)
@@ -37,11 +42,12 @@
    ("C-c n b" . denote-backlinks)
    ("C-c n d" . denote-dired))
   :config
-  (setq denote-directory (expand-file-name "notes" my-notes-directory))
+  (setq denote-directory (expand-file-name my-notes-directory))
   ;; so TODOs appear in the agenda list
   (push denote-directory org-agenda-files)
   ;; Renames buffer to "[D] <title>", instead of the scary name
-  (denote-rename-buffer-mode 1))
+  (denote-rename-buffer-mode 1)
+  (advice-add 'denote :around #'my/set-denote-dir))
 
 (use-package consult-denote
   :bind
