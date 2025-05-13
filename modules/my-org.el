@@ -67,8 +67,6 @@
   ;; Use the "journal" subdirectory of `my-notes-directory'.
   (setq denote-journal-directory
         (expand-file-name "journal" my-notes-directory))
-  ;; so TODOs appear in the agenda list
-  (push denote-journal-directory org-agenda-files)
   ;; Default keyword for new journal entries.
   (setq denote-journal-keyword "journal")
   ;; Read the doc string of `denote-journal-title-format'.
