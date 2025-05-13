@@ -1,4 +1,4 @@
-;;; my-org.el --- org-mode config -*- lexical-binding: t; -*-
+;;; my-org-notes.el --- org-mode config -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
@@ -72,5 +72,7 @@
   ;; Read the doc string of `denote-journal-title-format'.
   (setq denote-journal-title-format 'day))
 
-(provide 'my-org)
-;;; my-org.el ends here
+(use-package org-present)
+
+(provide 'my-org-notes)
+;;; my-org-notes.el ends here

@@ -39,7 +39,7 @@
 (require 'my-appearance)
 (require 'my-completion)
 (require 'my-misc)
-(require 'my-org)
+(require 'my-org-notes)
 (require 'my-markdown)
 (require 'my-lsp)
 (require 'my-yaml)
