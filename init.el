@@ -40,6 +40,7 @@
 (require 'my-completion)
 (require 'my-misc)
 (require 'my-org-notes)
+(require 'my-org-presentations)
 (require 'my-markdown)
 (require 'my-lsp)
 (require 'my-yaml)

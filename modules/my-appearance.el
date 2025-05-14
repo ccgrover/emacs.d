@@ -6,6 +6,12 @@
 
 ;;; Code:
 
+;; Font!
+
+;; A nice monospace font with Italics variants - nice!
+(add-to-list 'default-frame-alist
+             '(font . "Source Code Pro-12"))
+
 ;; display line numbers for all programming modes
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)

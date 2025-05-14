@@ -1,0 +1,55 @@
+;;; my-org-presentations.el --- For presenting org files -*- lexical-binding: t; -*-
+
+;;; Commentary:
+
+;;  Packages + config for presenting org-mode files.
+;;  Source for the majority of this file:
+;;  https://systemcrafters.net/emacs-tips/presentations-with-org-present/
+
+;;; Code:
+
+(use-package org-present
+  :config
+  (defun my/org-present-start ()
+    ;; ensure images are shown
+    (org-display-inline-images)
+    ;; Tweak font sizes
+    (setq-local face-remapping-alist '((default (:height 1.5))
+                                       (header-line (:height 4.0))
+                                       (org-document-title (:height 1.75) org-document-title)
+                                       (org-code (:height 1.55) org-code)
+                                       (org-verbatim (:height 1.55) org-verbatim)
+                                       (org-block (:height 1.25) org-block)
+                                       (org-block-begin-line (:height 0.7) org-block)))
+    ;; Set a blank header line string to create blank space at the top
+    (setq header-line-format " ")
+    ;; narrower column width due give some centering
+    (setq-local visual-fill-column-width 90)
+    ;; prevent myself from accidentally editing the slides
+    (org-present-read-only))
+
+  (defun my/org-present-end ()
+    ;; Reset font customizations
+    (setq-local face-remapping-alist '((default default)))
+    ;; Clear the header line format by setting to `nil'
+    (setq header-line-format nil)
+    ;; back to my default column width
+    (kill-local-variable 'visual-fill-column-width)
+    ;; allow editing again
+    (org-present-read-write))
+
+  (defun my/org-present-prepare-slide (buffer-name heading)
+    ;; Show only top-level headlines
+    (org-overview)
+    ;; Unfold the current entry
+    (org-show-entry)
+    ;; Show only direct subheadings of the slide but don't expand them
+    (org-show-children))
+
+  ;; Register hooks with org-present
+  (add-hook 'org-present-mode-hook 'my/org-present-start)
+  (add-hook 'org-present-mode-quit-hook 'my/org-present-end)
+  (add-hook 'org-present-after-navigate-functions 'my/org-present-prepare-slide))
+
+(provide 'my-org-presentations)
+;;; my-org-presentations.el ends here
