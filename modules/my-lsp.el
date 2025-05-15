@@ -32,10 +32,10 @@
   :custom ((projectile-create-missing-test-files t)
            (projectile-project-search-path '("~/workspace/"))
            (projectile-auto-cleanup-known-projects t)
-           (projectile-sort-order 'recently-active))
+           (projectile-sort-order 'recently-active)
+           ;; replace project.el, which appears by default at C-x p
+           (projectile-keymap-prefix (kbd "C-x p")))
   :config
-  (define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map)
-  (global-set-key (kbd "C-c p") 'projectile-command-map)
   (projectile-mode +1))
 
 (use-package flycheck

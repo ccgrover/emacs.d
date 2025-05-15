@@ -44,6 +44,10 @@
 (use-package tree-sitter-langs
   :config (tree-sitter-require 'yaml))
 
+;; mc
+
+(use-package multiple-cursors)
+
 ;; save minibuffer history
 
 (use-package savehist
@@ -51,9 +55,14 @@
   :init
   (savehist-mode))
 
-;; enable repeat mode!
+;; enable repeat mode! handy for scrolling through buffers with left/right
 
 (repeat-mode 1)
+
+;; pesky keybindings I do not want
+
+(global-unset-key (kbd "C-z"))     ;; minimize
+(global-unset-key (kbd "C-x C-z")) ;; minimize
 
 (provide 'my-misc)
 ;;; my-misc.el ends here
