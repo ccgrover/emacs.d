@@ -127,6 +127,7 @@
                    "org.assertj.core.api.Assertions.*"
                    "org.assertj.core.api.Assumptions.*"
                    "org.junit.jupiter.params.provider.Arguments.*"
+                   "org.junit.jupiter.api.Named.named"
                    )
                  lsp-java-completion-favorite-static-members)))
 
