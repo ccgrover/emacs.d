@@ -64,5 +64,12 @@
 (global-unset-key (kbd "C-z"))     ;; minimize
 (global-unset-key (kbd "C-x C-z")) ;; minimize
 
+;; latex
+
+(use-package auctex
+  :config
+  (setq TeX-auto-save t
+        TeX-parse-self t))
+
 (provide 'my-misc)
 ;;; my-misc.el ends here

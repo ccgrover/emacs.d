@@ -11,3 +11,15 @@
 * TODO documentation
 ** TODO plantuml
 ** TODO markdown
+
+* Working with TeX files
+
+This includes ~AUCTeX~ for working with TeX files.
+
+This does require a working TeX distribution on the system.
+
+** Fedora
+
+#+BEGIN_SRC shell
+  sudo dnf install texlive-scheme-basic
+#+END_SRC
