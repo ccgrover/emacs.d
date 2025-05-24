@@ -74,6 +74,12 @@
    ("C-c n d" . denote-dired))
   :config
   (setq denote-directory (expand-file-name my-notes-directory))
+  (setq denote-known-keywords
+        '("emacs"
+          "giftideas"
+          "kids"
+          "pathfinder"
+          "homeserver"))
   ;; so TODOs appear in the agenda list
   (push denote-directory org-agenda-files)
   ;; Renames buffer to "[D] <title>", instead of the scary name
