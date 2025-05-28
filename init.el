@@ -36,6 +36,7 @@
   :group 'emacs
   :prefix "my-")
 
+(require 'my-keybinds)
 (require 'my-appearance)
 (require 'my-completion)
 (require 'my-misc)

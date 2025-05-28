@@ -136,7 +136,11 @@
   :config (dap-auto-configure-mode))
 
 (use-package dap-java
-  :ensure nil)
+  :ensure nil
+  :bind
+  (("C-c t c" . dap-java-run-test-class)
+   ("C-c t m" . dap-java-run-test-method)
+   ("C-c t t" . dap-java-run-last-test)))
 
 (use-package consult-lsp
   :defer nil

@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+# name: Immutable interface
+# key: immutable
+# --
+package ${1:`(path-to-java-package)`};
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.immutables.value.Value;
+
+@Value.Immutable
+@JsonSerialize(as = Immutable${2:`(file-name-base
+              (or (buffer-file-name)
+                  (buffer-name)))`}.class)
+@JsonDeserialize(as = Immutable${2}.class)
+public interface ${2} {
+
+    $0
+}

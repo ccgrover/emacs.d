@@ -6,6 +6,10 @@
 
 ;;; Code:
 
+;; some common keybindings
+
+
+
 ;; 'y' or 'n'
 (setq use-short-answers t)
 
