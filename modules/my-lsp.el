@@ -153,6 +153,7 @@
 
 (use-package lsp-sonarlint
   :custom
+  (lsp-sonarlint-enabled-analyzers '("java"))
   (lsp-sonarlint-auto-download t))
 
 (provide 'my-lsp)
