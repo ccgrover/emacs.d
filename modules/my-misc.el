@@ -8,8 +8,6 @@
 
 ;; some common keybindings
 
-
-
 ;; 'y' or 'n'
 (setq use-short-answers t)
 
@@ -42,11 +40,9 @@
 
 (use-package magit)
 
-;; tree-sitter grammars
+;; yaml
 
 (use-package yaml-mode)
-(use-package tree-sitter-langs
-  :config (tree-sitter-require 'yaml))
 
 ;; mc
 
@@ -74,6 +70,13 @@
   :config
   (setq TeX-auto-save t
         TeX-parse-self t))
+
+;; fix path stuff
+
+(use-package exec-path-from-shell
+  :init
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
 
 (provide 'my-misc)
 ;;; my-misc.el ends here

@@ -6,7 +6,7 @@
 
 ;;; Code:
 
-(defcustom my-notes-directory "~/notes/"
+(defcustom my-notes-directory "~/Notes/"
   "Directory containing my notes."
   :type '(string)
   :group 'my-emacs)

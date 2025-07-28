@@ -45,7 +45,7 @@
   :bind ("<f7>" . ef-themes-rotate)
   :bind ("<f8>" . ef-themes-toggle)
   :config
-  (ef-themes-select 'ef-dream))
+  (ef-themes-select 'ef-autumn))
 
 ;; https://skybert.net/emacs/simple-modeline-brings-peace-of-mind/
 

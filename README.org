@@ -9,10 +9,17 @@
 #+END_SRC
 
 * TODO documentation
+
+** LSP Java
+
+*** Using different JDKs (Maven)
+
+- The Eclipse JDT LS requires JDK 21+ to run
+- In order to use a lower version of Java 
+
 ** TODO plantuml
 ** TODO markdown
-
-* Working with TeX files
+** Working with TeX files
 
 This includes ~AUCTeX~ for working with TeX files.
 

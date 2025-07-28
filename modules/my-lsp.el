@@ -12,11 +12,6 @@
   :type '(string)
   :group 'my-emacs)
 
-(defcustom my-java-formatter-settings nil
-  "Path to lombok.jar for JDTLS to use."
-  :type '(string)
-  :group 'my-emacs)
-
 ;; generic performance-related config
 
 (setq gc-cons-threshold (* 100 1024 1024)) ;; 100mb
@@ -41,7 +36,9 @@
 (use-package flycheck
   :defer nil
   ;; manually refresh buffer due to no lsp-idle-delay
-  :bind ("<f5>" . flycheck-buffer)
+  :bind (("<f5>" . flycheck-buffer)
+         ("M-n"  . flycheck-next-error)
+         ("M-p"  . flycheck-previous-error))
   :hook (flycheck-mode . flycheck-set-indication-mode)
   :custom (flycheck-indication-mode 'left-margin)
   :config (global-flycheck-mode))
@@ -94,12 +91,19 @@
         lsp-java-compile-null-analysis-nullable
         (vconcat '("org.jspecify.annotations.Nullable")
                  lsp-java-compile-null-analysis-nullable)
-        ;; Eclipse formatter settings
-        lsp-java-format-settings-url (concat "file:" my-java-formatter-settings)
+        ;; Maven settings
+        ;; lsp-java-configuration-maven-user-settings "~/.m2/settings.xml"
+        lsp-java-configuration-runtimes '[(:name "JavaSE-17"
+                                                 :path "~/.sdkman/candidates/java/17.0.15-tem"
+                                                 :default t)
+                                          (:name "JavaSE-21"
+                                                 :path "~/.sdkman/candidates/java/21.0.7-tem")]
         ;; VM args for performance and lombok
         ;; https://github.com/eclipse-jdtls/eclipse.jdt.ls/issues/1469
         lsp-java-vmargs
-        (list "-XX:+UseParallelGC"
+        (list "-Dlog.protocol=true"
+              "-Dlog.level=ALL"
+              "-XX:+UseParallelGC"
               "-XX:GCTimeRatio=4"
               "-XX:AdaptiveSizePolicyWeight=90"
               "-Dsun.zip.disableMemoryMapping=true"
