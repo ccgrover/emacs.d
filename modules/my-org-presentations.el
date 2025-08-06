@@ -14,8 +14,8 @@
     ;; ensure images are shown
     (org-display-inline-images)
     ;; Tweak font sizes
-    (setq-local face-remapping-alist '((default (:height 1.5))
-                                       (header-line (:height 4.0))
+    (setq-local face-remapping-alist '((default (:height 1.5) variable-pitch)
+                                       (header-line (:height 4.0) variable-pitch)
                                        (org-document-title (:height 1.75) org-document-title)
                                        (org-code (:height 1.55) org-code)
                                        (org-verbatim (:height 1.55) org-verbatim)
@@ -24,7 +24,8 @@
     ;; Set a blank header line string to create blank space at the top
     (setq header-line-format " ")
     ;; narrower column width due give some centering
-    (setq-local visual-fill-column-width 90)
+    (setq-local visual-fill-column-width 90
+                org-hide-emphasis-markers t)
     ;; prevent myself from accidentally editing the slides
     (org-present-read-only))
 
@@ -33,8 +34,9 @@
     (setq-local face-remapping-alist '((default default)))
     ;; Clear the header line format by setting to `nil'
     (setq header-line-format nil)
-    ;; back to my default column width
+    ;; back to defaults
     (kill-local-variable 'visual-fill-column-width)
+    (kill-local-variable 'org-hide-emphasis-markers)
     ;; allow editing again
     (org-present-read-write))
 

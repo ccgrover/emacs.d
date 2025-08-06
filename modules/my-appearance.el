@@ -11,6 +11,8 @@
 ;; A nice monospace font with Italics variants - nice!
 (add-to-list 'default-frame-alist
              '(font . "Source Code Pro-12"))
+(set-face-attribute 'default nil :font "Source Code Pro-12")
+(set-face-attribute 'fixed-pitch nil :font "Source Code Pro-12")
 
 ;; a little breathing room on the left/right fringes
 (set-fringe-mode 20)
