@@ -51,7 +51,8 @@
   :bind (:map lsp-mode-map
               (("C-M-g" . lsp-find-implementation)
                ("M-RET" . lsp-execute-code-action)))
-  :custom ((lsp-idle-delay nil)
+  :custom (
+           ;; (lsp-idle-delay nil)
            (lsp-disabled-clients '(semgrep-ls))
            (lsp-enable-file-watchers nil)
            (lsp-headerline-breadcrumb-enable nil)
@@ -82,15 +83,6 @@
          (java-mode . lsp-java-boot-lens-mode))
   ;; use setq instead of :custom so we can just append to vector variables
   :config
-  ;; testing this for JSpecify NullMarked
-  (lsp-defcustom lsp-java-compile-null-analysis-nonnullbydefault ["org.jspecify.annotations.NullMarked"]
-    "Specify the Nullable annotation types to be used for null
-analysis. If more than one annotation is specified, then the
-topmost annotation will be used first if it exists in project
-dependencies. This setting will be ignored if
-`java.compile.nullAnalysis.mode` is set to `disabled`"
-    :type 'lsp-string-vector
-    :lsp-path "java.compile.nullAnalysis.nonnullbydefault")
   (setq lsp-java-maven-download-sources t
         ;; set to "verbose" for troubleshooting, otherwise "off"
         lsp-java-trace-server "verbose"

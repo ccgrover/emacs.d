@@ -45,6 +45,7 @@
 (require 'my-markdown)
 (require 'my-lsp)
 (require 'my-yaml)
+(require 'my-llm)
 
 ;;; _
 (provide 'init)
