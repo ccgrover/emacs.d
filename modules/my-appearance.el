@@ -20,20 +20,8 @@
   :group 'my-emacs)
 
 ;; A nice monospace font with Italics variants - nice!
-(add-to-list 'default-frame-alist
-             '(font . "Source Code Pro"))
-(set-face-attribute 'default nil
-                    :font my-fixed-width-font
-                    :weight 'light
-                    :height 180)
-(set-face-attribute 'fixed-pitch nil
-                    :font my-fixed-width-font
-                    :weight 'light
-                    :height 190)
-(set-face-attribute 'variable-pitch nil
-                    :font my-variable-width-font
-                    :weight 'light
-                    :height 1.3)
+(set-frame-font (font-spec :name my-fixed-width-font
+                           :size 16) nil t)
 
 ;; a little breathing room on the left/right fringes
 (set-fringe-mode 20)
