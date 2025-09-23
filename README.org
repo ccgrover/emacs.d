@@ -10,15 +10,29 @@
 
 * TODO documentation
 
+** Installing Emacs (Fedora)
+
+Update version number based on what I want to install
+
+#+begin_src shell
+  sudo dnf install emacs-lucid-30.2
+#+end_src
+
+Fixing the Dark theme:
+- Install ~gnome-themes-extra~
+- Update ~Gnome Tweaks > Appearance > Legacy Applications > Adwaita-dark~
+  
 ** LSP Java
 
 *** Using different JDKs (Maven)
 
 - The Eclipse JDT LS requires JDK 21+ to run
-- In order to use a lower version of Java 
+- In order to use a lower version of Java... TODO
 
 ** TODO plantuml
+
 ** TODO markdown
+
 ** Working with TeX files
 
 This includes ~AUCTeX~ for working with TeX files.
