@@ -8,11 +8,32 @@
 
 ;; Font!
 
+;; Set reusable font name variables
+(defcustom my-fixed-width-font "Source Code Pro"
+  "The font to use for monospaced (fixed width) text."
+  :type '(string)
+  :group 'my-emacs)
+
+(defcustom my-variable-width-font "Open Sans"
+  "The font to use for variable-pitch (document) text."
+  :type '(string)
+  :group 'my-emacs)
+
 ;; A nice monospace font with Italics variants - nice!
 (add-to-list 'default-frame-alist
-             '(font . "Source Code Pro-12"))
-(set-face-attribute 'default nil :font "Source Code Pro-12")
-(set-face-attribute 'fixed-pitch nil :font "Source Code Pro-12")
+             '(font . "Source Code Pro"))
+(set-face-attribute 'default nil
+                    :font my-fixed-width-font
+                    :weight 'light
+                    :height 180)
+(set-face-attribute 'fixed-pitch nil
+                    :font my-fixed-width-font
+                    :weight 'light
+                    :height 190)
+(set-face-attribute 'variable-pitch nil
+                    :font my-variable-width-font
+                    :weight 'light
+                    :height 1.3)
 
 ;; a little breathing room on the left/right fringes
 (set-fringe-mode 20)
