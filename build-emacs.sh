@@ -1,0 +1,33 @@
+./configure \
+      --prefix=/usr \
+      --exec-prefix=/usr \
+      --bindir=/usr/bin \
+      --sbindir=/usr/bin \
+      --sysconfdir=/etc \
+      --datadir=/usr/share \
+      --includedir=/usr/include \
+      --libdir=/usr/lib64 \
+      --libexecdir=/usr/libexec \
+      --localstatedir=/var \
+      --runstatedir=/run \
+      --sharedstatedir=/var/lib \
+      --mandir=/usr/share/man \
+      --infodir=/usr/share/info \
+      --disable-gc-mark-trace \
+      --with-cairo \
+      --with-dbus \
+      --with-gif \
+      --with-gpm=no \
+      --with-harfbuzz \
+      --with-jpeg \
+      --with-modules \
+      --with-native-compilation=aot \
+      --with-pgtk \
+      --with-png \
+      --with-rsvg \
+      --with-sqlite3 \
+      --with-tiff \
+      --with-tree-sitter \
+      --with-webp \
+      --with-xpm \
+      --with-mailutils

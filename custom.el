@@ -17,5 +17,12 @@
  '(org-fontify-quote-and-verse-blocks t)
  '(package-selected-packages nil)
  '(safe-local-variable-values
-   '((eval setenv "JAVA_HOME" "~/.sdkman/candidates/java/17.0.15-tem"))))
+   '((eval setenv "JAVA_HOME" "~/.sdkman/candidates/java/17.0.15-tem")))
+ '(sql-connection-alist '(("Snowflake" (sql-product 'ansi)))))
 
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
