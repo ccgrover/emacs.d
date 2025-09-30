@@ -43,8 +43,8 @@
    :sqli-program "snow"
    :sqli-login 'my-sql-snowflake-login-params
    :sqli-comint-func #'my-snowflake-sql-comint
-   :prompt-regexp " > "
-   :prompt-cont-regexp "   "
+   :prompt-regexp "^ > "
+   :prompt-cont-regexp "^   "
    )
   
   (add-to-list 'sql-connection-alist
