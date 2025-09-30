@@ -6,7 +6,7 @@
 ;;; Code:
 
 ;; set to t for debugging
-(setq debug-on-error nil)
+(setq debug-on-error t)
 
 ;; set the location for auto-generated Customizations
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -46,6 +46,8 @@
 (require 'my-lsp)
 (require 'my-yaml)
 (require 'my-llm)
+(require 'my-dbt)
+(require 'my-snowflake)
 
 ;;; _
 (provide 'init)

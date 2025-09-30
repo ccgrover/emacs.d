@@ -15,10 +15,8 @@
    "/home/cgrover/tools/eclipseformatter/eclipse-java-google-style.xml")
  '(my-lombok-path "/home/cgrover/Tools/lombok/lombok.jar")
  '(org-fontify-quote-and-verse-blocks t)
- '(package-selected-packages nil)
  '(safe-local-variable-values
-   '((eval setenv "JAVA_HOME" "~/.sdkman/candidates/java/17.0.15-tem")))
- '(sql-connection-alist '(("Snowflake" (sql-product 'ansi)))))
+   '((eval setenv "JAVA_HOME" "~/.sdkman/candidates/java/17.0.16-tem"))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
