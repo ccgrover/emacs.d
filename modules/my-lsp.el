@@ -80,6 +80,7 @@
   :pin melpa
   :hook ((java-mode . lsp)
          (lsp-mode . lsp-lens-mode)
+         (lsp-mode . editorconfig-mode)
          (java-mode . lsp-java-boot-lens-mode))
   ;; use setq instead of :custom so we can just append to vector variables
   :config
@@ -97,10 +98,10 @@
         ;; Maven settings
         ;; lsp-java-configuration-maven-user-settings "~/.m2/settings.xml"
         lsp-java-configuration-runtimes '[(:name "JavaSE-17"
-                                                 :path "~/.sdkman/candidates/java/17.0.15-tem"
+                                                 :path "~/.sdkman/candidates/java/17.0.16-tem/"
                                                  :default t)
                                           (:name "JavaSE-21"
-                                                 :path "~/.sdkman/candidates/java/21.0.7-tem")]
+                                                 :path "~/.sdkman/candidates/java/21.0.8-tem")]
         ;; VM args for performance and lombok
         ;; https://github.com/eclipse-jdtls/eclipse.jdt.ls/issues/1469
         lsp-java-vmargs

@@ -31,6 +31,7 @@
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (add-hook 'yaml-mode-hook 'display-line-numbers-mode)
 (add-hook 'yaml-ts-mode-hook 'display-line-numbers-mode)
+(add-hook 'csv-mode-hook 'display-line-numbers-mode)
 
 ;; nicer welcome screen
 ;; https://github.com/emacs-dashboard/emacs-dashboard

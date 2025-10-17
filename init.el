@@ -6,7 +6,7 @@
 ;;; Code:
 
 ;; set to t for debugging
-(setq debug-on-error t)
+(setq debug-on-error nil)
 
 ;; set the location for auto-generated Customizations
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -42,6 +42,7 @@
 (require 'my-misc)
 (require 'my-org-notes)
 (require 'my-org-presentations)
+(require 'my-plantuml)
 (require 'my-markdown)
 (require 'my-lsp)
 (require 'my-yaml)
@@ -52,3 +53,4 @@
 ;;; _
 (provide 'init)
 ;;; init.el ends here
+(put 'downcase-region 'disabled nil)
