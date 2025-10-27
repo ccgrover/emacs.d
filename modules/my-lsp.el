@@ -52,7 +52,7 @@
               (("C-M-g" . lsp-find-implementation)
                ("M-RET" . lsp-execute-code-action)))
   :custom (
-           ;; (lsp-idle-delay nil)
+           (lsp-idle-delay 0.500)
            (lsp-disabled-clients '(semgrep-ls))
            (lsp-enable-file-watchers nil)
            (lsp-headerline-breadcrumb-enable nil)
