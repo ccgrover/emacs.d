@@ -78,5 +78,10 @@
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))
 
+;; recipe extraction!
+
+(use-package org-chef
+  :ensure t)
+
 (provide 'my-misc)
 ;;; my-misc.el ends here
