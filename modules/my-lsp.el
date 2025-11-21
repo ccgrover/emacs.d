@@ -105,9 +105,7 @@
         ;; VM args for performance and lombok
         ;; https://github.com/eclipse-jdtls/eclipse.jdt.ls/issues/1469
         lsp-java-vmargs
-        (list "-Dlog.protocol=true"
-              "-Dlog.level=ALL"
-              "-XX:+UseParallelGC"
+        (list "-XX:+UseParallelGC"
               "-XX:GCTimeRatio=4"
               "-XX:AdaptiveSizePolicyWeight=90"
               "-Dsun.zip.disableMemoryMapping=true"

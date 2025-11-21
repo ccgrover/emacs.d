@@ -22,7 +22,7 @@
   :init (global-completion-preview-mode)
   :custom (corfu-cycle t)        ; Allows cycling through candidates
   :custom (corfu-auto t)         ; Enable auto completion
-  :custom (corfu-auto-prefix 2)  ; Complete with less prefix keys
+  :custom (corfu-auto-prefix 4)  ; Complete with less prefix keys
   )
 (use-package corfu-terminal)
 (use-package embark
