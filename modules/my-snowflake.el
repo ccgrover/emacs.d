@@ -77,7 +77,5 @@ whitespace is still included in the output."
                           ;; make it buffer-local
                           nil t)))))
 
-
-
 (provide 'my-snowflake)
 ;;; my-snowflake.el ends here

@@ -31,5 +31,7 @@
   (setq org-plantuml-jar-path
         (expand-file-name my-plantuml-jar-path)))
 
+(use-package mermaid-mode)
+
 (provide 'my-plantuml)
 ;;; my-plantuml.el ends here

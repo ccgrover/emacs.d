@@ -15,6 +15,10 @@
 
 (global-auto-revert-mode)
 
+;; delete region when you type / paste something
+
+(delete-selection-mode 1)
+
 ;; do not create lockfiles
 
 (setq create-lockfiles nil)
@@ -71,12 +75,17 @@
   (setq TeX-auto-save t
         TeX-parse-self t))
 
+;; clickable links!
+
+(goto-address-mode 1)
+
 ;; fix path stuff
 
 (use-package exec-path-from-shell
   :init
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)))
+  (exec-path-from-shell-initialize))
+;; (when (memq window-system '(mac ns x))
+;;   (exec-path-from-shell-initialize)))
 
 ;; recipe extraction!
 
