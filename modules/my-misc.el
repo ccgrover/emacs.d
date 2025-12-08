@@ -83,6 +83,9 @@
 
 (use-package exec-path-from-shell
   :init
+  (require 'exec-path-from-shell)
+  (dolist (var '("SNOWFLAKE_USER"))
+    (add-to-list 'exec-path-from-shell-variables var))
   (exec-path-from-shell-initialize))
 ;; (when (memq window-system '(mac ns x))
 ;;   (exec-path-from-shell-initialize)))
