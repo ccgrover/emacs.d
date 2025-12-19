@@ -31,7 +31,10 @@
   (setq org-plantuml-jar-path
         (expand-file-name my-plantuml-jar-path)))
 
-(use-package mermaid-mode)
+(use-package mermaid-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.mermaid\\'" . mermaid-mode))
+  (add-to-list 'auto-mode-alist '("\\.mmd\\'"     . mermaid-mode)))
 
 (provide 'my-plantuml)
 ;;; my-plantuml.el ends here
