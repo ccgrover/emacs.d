@@ -25,6 +25,8 @@
 
 ;; LOAD MY MODULES
 
+(setq package-install-upgrade-built-in t)
+
 (use-package auto-package-update
   :config
   (setq auto-package-update-delete-old-versions t)

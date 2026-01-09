@@ -50,7 +50,7 @@
   :init (setq lsp-keymap-prefix "C-c l")
   :bind (:map lsp-mode-map
               (("C-M-g" . lsp-find-implementation)
-               ("M-RET" . lsp-execute-code-action)))
+               ("C-RET" . lsp-execute-code-action)))
   :custom (
            (lsp-idle-delay 0.500)
            (lsp-disabled-clients '(semgrep-ls))
@@ -98,7 +98,7 @@
         ;; Maven settings
         ;; lsp-java-configuration-maven-user-settings "~/.m2/settings.xml"
         lsp-java-configuration-runtimes '[(:name "JavaSE-17"
-                                                 :path "~/.sdkman/candidates/java/17.0.16-tem/"
+                                                 :path "~/.sdkman/candidates/java/17.0.17-tem/"
                                                  :default t)
                                           (:name "JavaSE-21"
                                                  :path "~/.sdkman/candidates/java/21.0.8-tem")]

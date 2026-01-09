@@ -21,7 +21,11 @@ Update version number based on what I want to install
 Fixing the Dark theme:
 - Install ~gnome-themes-extra~
 - Update ~Gnome Tweaks > Appearance > Legacy Applications > Adwaita-dark~
-  
+
+** ~org-mode~
+
+See [[https://doc.norang.ca/org-mode.html][Bernt Hansen's org-mode notes]]
+
 ** LSP Java
 
 *** Using different JDKs (Maven)
