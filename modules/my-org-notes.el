@@ -32,7 +32,7 @@
   (keymap-set 'my-org-mode-map "l" #'org-todo-list)
   (keymap-set 'my-org-mode-map "c" #'org-capture)
   (keymap-global-set "C-c o" 'my-org-mode-map)
-  ;; appearance options
+  ;; appearance options - use 'visible-mode' to toggle visible
   (setq org-hide-emphasis-markers t)
   ;; Resize Org headings
   (dolist (face '((org-level-1 . 1.2)

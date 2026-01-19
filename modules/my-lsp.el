@@ -18,6 +18,11 @@
 (setq read-process-output-max (* 10 1024 1024)) ;; 10mb
 (setq process-adaptive-read-buffering nil)
 
+;; Containerfile code until I find somewhere better to put it
+
+(use-package dockerfile-mode
+  :custom (dockerfile-mode-command "podman"))
+
 ;; LSP packages
 
 (use-package ag)
@@ -50,7 +55,7 @@
   :init (setq lsp-keymap-prefix "C-c l")
   :bind (:map lsp-mode-map
               (("C-M-g" . lsp-find-implementation)
-               ("C-RET" . lsp-execute-code-action)))
+               ("C-<return>" . lsp-execute-code-action)))
   :custom (
            (lsp-idle-delay 0.500)
            (lsp-disabled-clients '(semgrep-ls))
