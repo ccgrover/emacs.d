@@ -58,11 +58,6 @@
     (visual-line-mode 1))
   (add-hook 'org-mode-hook 'my/center-org-buffers))
 
-(defun my/set-denote-dir (orig-fun &rest args)
-  "Call ORIG-FUN with ARGS using the `pages' subdir for denote."
-  (let ((denote-use-directory (expand-file-name "pages" denote-directory)))
-    (apply orig-fun args)))
-
 ;; https://protesilaos.com/emacs/denote
 (use-package denote
   :hook (dired-mode . denote-dired-mode)
@@ -73,13 +68,13 @@
    ("C-c n b" . denote-backlinks)
    ("C-c n d" . denote-dired))
   :config
+  (defun my/set-denote-dir (orig-fun &rest args)
+    "Call ORIG-FUN with ARGS using the `pages' subdir for denote."
+    (let ((denote-use-directory (expand-file-name "pages" denote-directory)))
+      (apply orig-fun args)))
   (setq denote-directory (expand-file-name my-notes-directory))
-  (setq denote-known-keywords
-        '("emacs"
-          "giftideas"
-          "kids"
-          "pathfinder"
-          "homeserver"))
+  ;; also customize 'denote-known-keywords' for a controlled vocabulary for keywords
+  (setq denote-infer-keywords nil)
   ;; so TODOs appear in the agenda list
   (push denote-directory org-agenda-files)
   ;; Renames buffer to "[D] <title>", instead of the scary name

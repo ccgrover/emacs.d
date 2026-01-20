@@ -8,6 +8,9 @@
    '("00d7122017db83578ef6fba39c131efdcb59910f0fac0defbe726da8072a0729"
      default))
  '(dap-java-hot-reload 'never)
+ '(denote-known-keywords
+   '("1x1" "book club" "emacs" "workspace" "presentation"
+     "quarterly connections" "java" "spring"))
  '(lisp-indent-offset nil)
  '(lsp-java-configuration-maven-user-settings "~/.m2/settings.xml")
  '(lsp-server-trace "verbose")
