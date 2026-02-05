@@ -77,11 +77,11 @@
 
 ;; https://skybert.net/emacs/simple-modeline-brings-peace-of-mind/
 
-;; (setq display-time-day-and-date nil)
-;; (setq display-time-load-average nil)
-;; (setq display-time-24hr-format t)
-;; (display-time-mode 1)
-;; (setq-default mode-line-format '(" %b %* %z " display-time-string " (%l, %c)"))
+(setq display-time-day-and-date nil)
+(setq display-time-load-average nil)
+(setq display-time-24hr-format t)
+(display-time-mode 1)
+(setq-default mode-line-format '(" %b %* %z " display-time-string " (%l, %c)"))
 
 (provide 'my-appearance)
 ;;; my-appearance.el ends here

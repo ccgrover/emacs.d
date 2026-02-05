@@ -23,6 +23,7 @@
   :custom (corfu-cycle t)        ; Allows cycling through candidates
   :custom (corfu-auto t)         ; Enable auto completion
   :custom (corfu-auto-prefix 3)  ; Complete with less prefix keys
+  :custom (corfu-auto-delay 0.5) ; Slightly longer delay
   )
 (use-package corfu-terminal)
 (use-package embark

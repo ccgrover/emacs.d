@@ -25,6 +25,15 @@
 
 ;; LSP packages
 
+;; prefer java-ts-mode to java-mode
+(use-package treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
+
+
 (use-package ag)
 
 (use-package projectile
@@ -84,6 +93,7 @@
   ;; use melpa over melpa-stable for newer features
   :pin melpa
   :hook ((java-mode . lsp)
+         (java-ts-mode . lsp)
          (lsp-mode . lsp-lens-mode)
          (lsp-mode . editorconfig-mode)
          (java-mode . lsp-java-boot-lens-mode))
@@ -91,7 +101,12 @@
   :config
   (setq lsp-java-maven-download-sources t
         ;; set to "verbose" for troubleshooting, otherwise "off"
-        lsp-java-trace-server "verbose"
+        lsp-java-trace-server "off"
+        ;; fewer max completion candidates for performance
+        lsp-java-completion-max-results 5
+        ;; disable formatting to possibly save some time and hassle
+        lsp-java-format-enabled nil
+        lsp-java-format-on-type-enabled nil
         ;; null analysis including JSpecify annotations
         lsp-java-compile-null-analysis-mode "automatic"
         lsp-java-compile-null-analysis-nonnull
@@ -106,7 +121,7 @@
                                                  :path "~/.sdkman/candidates/java/17.0.17-tem/"
                                                  :default t)
                                           (:name "JavaSE-21"
-                                                 :path "~/.sdkman/candidates/java/21.0.8-tem")]
+                                                 :path "~/.sdkman/candidates/java/21.0.9-tem")]
         ;; VM args for performance and lombok
         ;; https://github.com/eclipse-jdtls/eclipse.jdt.ls/issues/1469
         lsp-java-vmargs
