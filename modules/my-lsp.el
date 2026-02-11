@@ -66,20 +66,25 @@
               (("C-M-g" . lsp-find-implementation)
                ("C-<return>" . lsp-execute-code-action)))
   :custom (
-           (lsp-idle-delay 0.500)
+           (lsp-idle-delay 0.200)
            (lsp-disabled-clients '(semgrep-ls))
            (lsp-enable-file-watchers nil)
            (lsp-headerline-breadcrumb-enable nil)
            (lsp-completion-provider :none)
-           ;; completion is currently KILLING my LSP performance
-           (lsp-completion-enable nil))
+           ;; re-enabled with optimizations
+           (lsp-completion-enable t)
+           ;; additional performance optimizations
+           (lsp-enable-snippet nil)
+           (lsp-enable-folding nil)
+           (lsp-enable-text-document-color nil)
+           (lsp-enable-on-type-formatting nil))
   :init
   (defun my/lsp-mode-setup-completion ()
+    ;; Use faster completion styles for LSP - orderless can be slow
     (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-          '(orderless))
-    ;; Optionally configure the cape-capf-buster.
+          '(basic partial-completion))
     (setq-local completion-at-point-functions
-                (list (cape-capf-buster #'lsp-completion-at-point))))
+                (list #'lsp-completion-at-point)))
   :hook (lsp-completion-mode . my/lsp-mode-setup-completion)
   :hook (lsp-mode . lsp-enable-which-key-integration))
 
@@ -96,16 +101,17 @@
   :pin melpa
   :hook ((java-mode . lsp)
          (java-ts-mode . lsp)
-         (lsp-mode . lsp-lens-mode)
+         ;; lsp-lens-mode disabled for performance
          (lsp-mode . editorconfig-mode)
-         (java-mode . lsp-java-boot-lens-mode))
+         ;; lsp-java-boot-lens-mode disabled for performance
+         )
   ;; use setq instead of :custom so we can just append to vector variables
   :config
-  (setq lsp-java-maven-download-sources t
+  (setq lsp-java-maven-download-sources nil
         ;; set to "verbose" for troubleshooting, otherwise "off"
         lsp-java-trace-server "off"
         ;; fewer max completion candidates for performance
-        lsp-java-completion-max-results 5
+        lsp-java-completion-max-results 20
         ;; disable formatting to possibly save some time and hassle
         lsp-java-format-enabled nil
         lsp-java-format-on-type-enabled nil
@@ -179,10 +185,11 @@
 
 (use-package lsp-treemacs)
 
-(use-package lsp-sonarlint
-  :custom
-  (lsp-sonarlint-enabled-analyzers '("java"))
-  (lsp-sonarlint-auto-download t))
+;; lsp-sonarlint disabled for performance - use flycheck/checkstyle instead
+;; (use-package lsp-sonarlint
+;;   :custom
+;;   (lsp-sonarlint-enabled-analyzers '("java"))
+;;   (lsp-sonarlint-auto-download t))
 
 (provide 'my-lsp)
 ;;; my-lsp.el ends here

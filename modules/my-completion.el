@@ -12,18 +12,17 @@
   ;; Press C-c p ? to for help.
   :bind ("C-c p" . cape-prefix-map)
   :init
-  ;; consider adding more cape functions
-  (add-hook 'completion-at-point-functions #'cape-dabbrev)
-  (add-hook 'completion-at-point-functions #'cape-file))
+  ;; cape functions removed for performance - LSP provides completions
+  )
 (use-package consult
   :init (setq completion-in-region-function #'consult-completion-in-region))
 (use-package corfu
   :init (global-corfu-mode 1)
-  :init (global-completion-preview-mode)
+  ;; global-completion-preview-mode disabled for performance
   :custom (corfu-cycle t)        ; Allows cycling through candidates
   :custom (corfu-auto t)         ; Enable auto completion
-  :custom (corfu-auto-prefix 3)  ; Complete with less prefix keys
-  :custom (corfu-auto-delay 0.5) ; Slightly longer delay
+  :custom (corfu-auto-prefix 2)  ; Reduced for better performance
+  :custom (corfu-auto-delay 0.0) ; Instant completion
   )
 (use-package corfu-terminal)
 (use-package embark
