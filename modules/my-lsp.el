@@ -70,7 +70,9 @@
            (lsp-disabled-clients '(semgrep-ls))
            (lsp-enable-file-watchers nil)
            (lsp-headerline-breadcrumb-enable nil)
-           (lsp-completion-provider :none))
+           (lsp-completion-provider :none)
+           ;; completion is currently KILLING my LSP performance
+           (lsp-completion-enable nil))
   :init
   (defun my/lsp-mode-setup-completion ()
     (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))

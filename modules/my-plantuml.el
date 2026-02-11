@@ -15,7 +15,6 @@
   :config
   (setq plantuml-jar-path my-plantuml-jar-path)
   (setq plantuml-default-exec-mode 'jar)
-  (setq plantuml-preview-default-theme "ef-kassio")
   ;; (setq plantuml-output-type "png")
 
   (add-to-list 'auto-mode-alist '("\\.puml\\'" . plantuml-mode))
