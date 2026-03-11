@@ -71,7 +71,8 @@
     (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
           '(orderless))
     ;; Optionally configure the first word as flex filtered.
-    (setq-local orderless-style-dispatchers (list #'my/orderless-dispatch-flex-first)))
+    (setq-local orderless-style-dispatchers (list #'my/orderless-dispatch-flex-first))
+    (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point))))
 
   :hook
   (lsp-completion-mode . my/lsp-mode-setup-completion)
