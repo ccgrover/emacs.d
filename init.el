@@ -47,6 +47,7 @@
 (require 'my-plantuml)
 (require 'my-markdown)
 (require 'my-lsp)
+(require 'my-python)
 (require 'my-yaml)
 (require 'my-llm)
 (require 'my-dbt)

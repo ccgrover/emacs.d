@@ -18,7 +18,12 @@
   ;; (setq plantuml-output-type "png")
 
   (add-to-list 'auto-mode-alist '("\\.puml\\'" . plantuml-mode))
-  
+
+  ;; Disable plantuml-mode's built-in completion to avoid conflicts with corfu
+  (add-hook 'plantuml-mode-hook
+            (lambda ()
+              (setq-local completion-at-point-functions nil)))
+
   (org-babel-do-load-languages
    'org-babel-load-languages
    '(;; other Babel languages
