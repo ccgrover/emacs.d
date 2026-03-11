@@ -70,22 +70,9 @@
            (lsp-disabled-clients '(semgrep-ls))
            (lsp-enable-file-watchers nil)
            (lsp-headerline-breadcrumb-enable nil)
-           (lsp-completion-provider :none)
-           ;; re-enabled with optimizations
            (lsp-completion-enable t)
            ;; additional performance optimizations
-           (lsp-enable-snippet nil)
-           (lsp-enable-folding nil)
-           (lsp-enable-text-document-color nil)
            (lsp-enable-on-type-formatting nil))
-  :init
-  (defun my/lsp-mode-setup-completion ()
-    ;; Use faster completion styles for LSP - orderless can be slow
-    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-          '(basic partial-completion))
-    (setq-local completion-at-point-functions
-                (list #'lsp-completion-at-point)))
-  :hook (lsp-completion-mode . my/lsp-mode-setup-completion)
   :hook (lsp-mode . lsp-enable-which-key-integration))
 
 (use-package which-key
