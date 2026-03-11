@@ -26,8 +26,6 @@
 
 ;; ========== CORFU ==========
 
-;; Vertico is a minibuffer-based completion UI
-
 (use-package corfu
   :init (global-corfu-mode 1)
   ;; global-completion-preview-mode disabled for performance
@@ -36,6 +34,16 @@
   :custom (corfu-auto-prefix 3)  ; minimum number of characters
   :custom (corfu-auto-delay 0.2) ; delay before completion candidates appear
   )
+
+(use-package cape)
+
+(use-package orderless
+  :init
+  ;; Tune the global completion style settings to your liking!
+  ;; This affects the minibuffer and non-lsp completion at point.
+  (setq completion-styles '(orderless partial-completion basic)
+        completion-category-defaults nil
+        completion-category-overrides nil))
 
 (provide 'my-completion)
 ;;; my-completion.el ends here

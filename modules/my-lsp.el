@@ -61,12 +61,26 @@
   :config (yas-global-mode))
 
 (use-package lsp-mode
+  :custom
+  (lsp-completion-provider :none) ;; we use Corfu!
+
+  :init
+  (defun my/orderless-dispatch-flex-first (_pattern index _total)
+    (and (eq index 0) 'orderless-flex))
+  (defun my/lsp-mode-setup-completion ()
+    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+          '(orderless))
+    ;; Optionally configure the first word as flex filtered.
+    (setq-local orderless-style-dispatchers (list #'my/orderless-dispatch-flex-first)))
+
+  :hook
+  (lsp-completion-mode . my/lsp-mode-setup-completion)
   :init (setq lsp-keymap-prefix "C-c l")
   :bind (:map lsp-mode-map
               (("C-M-g" . lsp-find-implementation)
                ("C-<return>" . lsp-execute-code-action)))
   :custom (
-           (lsp-idle-delay 0.200)
+           (lsp-idle-delay 0.500)
            (lsp-disabled-clients '(semgrep-ls))
            (lsp-enable-file-watchers nil)
            (lsp-headerline-breadcrumb-enable nil)
@@ -81,7 +95,12 @@
 
 (use-package hydra)
 
-(use-package lsp-ui)
+(use-package lsp-ui
+  :custom
+  ;; Disable automatic code action requests to reduce server load
+  (lsp-ui-sideline-delay 1.0)
+  (lsp-ui-sideline-update-mode 'line) ;; update on line change
+  (lsp-modeline-code-actions-enable nil))
 
 (use-package lsp-java
   ;; use melpa over melpa-stable for newer features
