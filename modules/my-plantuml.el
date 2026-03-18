@@ -20,12 +20,29 @@
   (add-to-list 'auto-mode-alist '("\\.puml\\'" . plantuml-mode))
 
   ;; Fix completion to use modern completion-at-point instead of obsolete function
+  (defun my/plantuml-completion-at-point-fixed ()
+    "Fixed version of plantuml completion that doesn't move point.
+Original uses `beginning-of-thing' and `end-of-thing' which move point as a side effect."
+    (let* ((bounds (bounds-of-thing-at-point 'symbol))
+           (thing-start (car bounds))
+           (thing-end (cdr bounds)))
+      (when bounds
+        (list thing-start
+              thing-end
+              plantuml-kwdList
+              '(:exclusive no)))))
+
   (defun my/plantuml-setup-completion ()
-    "Replace obsolete completion function with modern one for Corfu."
+    "Replace obsolete completion function with fixed one for Corfu."
     (setq-local completion-at-point-functions
-                (list #'plantuml-completion-at-point-function)))
+                (list #'my/plantuml-completion-at-point-fixed)))
+
+  (defun my/plantuml-disable-electric-indent ()
+    "Disable automatic indentation in plantuml-mode."
+    (electric-indent-local-mode -1))
 
   (add-hook 'plantuml-mode-hook #'my/plantuml-setup-completion)
+  (add-hook 'plantuml-mode-hook #'my/plantuml-disable-electric-indent)
 
   (org-babel-do-load-languages
    'org-babel-load-languages
