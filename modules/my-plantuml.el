@@ -19,6 +19,14 @@
 
   (add-to-list 'auto-mode-alist '("\\.puml\\'" . plantuml-mode))
 
+  ;; Fix completion to use modern completion-at-point instead of obsolete function
+  (defun my/plantuml-setup-completion ()
+    "Replace obsolete completion function with modern one for Corfu."
+    (setq-local completion-at-point-functions
+                (list #'plantuml-completion-at-point-function)))
+
+  (add-hook 'plantuml-mode-hook #'my/plantuml-setup-completion)
+
   (org-babel-do-load-languages
    'org-babel-load-languages
    '(;; other Babel languages
