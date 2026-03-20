@@ -51,17 +51,16 @@
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
-;; Add documentation popups to Corfu
-(use-package corfu-doc
+;; Add documentation popups to Corfu (built-in)
+(use-package corfu-popupinfo
+  :ensure nil ; built into corfu
   :after corfu
-  :hook (corfu-mode . corfu-doc-mode)
+  :hook (corfu-mode . corfu-popupinfo-mode)
   :custom
-  (corfu-doc-delay 0.5)
-  (corfu-doc-max-width 70)
-  (corfu-doc-max-height 20)
+  (corfu-popupinfo-delay 0.5)
   :config
   ;; Use C-c d to toggle documentation popup manually
-  (define-key corfu-map (kbd "C-c d") #'corfu-doc-toggle))
+  (define-key corfu-map (kbd "C-c d") #'corfu-popupinfo-toggle))
 
 (use-package cape)
 
