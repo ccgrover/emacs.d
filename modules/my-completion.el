@@ -24,6 +24,14 @@
   :init
   (savehist-mode))
 
+;; ========== MARGINALIA ==========
+
+;; Marginalia adds rich annotations in the minibuffer
+
+(use-package marginalia
+  :init
+  (marginalia-mode))
+
 ;; ========== CORFU ==========
 
 (use-package corfu
@@ -34,6 +42,26 @@
   :custom (corfu-auto-prefix 3)  ; minimum number of characters
   :custom (corfu-auto-delay 0.2) ; delay before completion candidates appear
   )
+
+;; Add icons to Corfu completions
+(use-package kind-icon
+  :after corfu
+  :custom
+  (kind-icon-default-face 'corfu-default) ; Use corfu face
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
+;; Add documentation popups to Corfu
+(use-package corfu-doc
+  :after corfu
+  :hook (corfu-mode . corfu-doc-mode)
+  :custom
+  (corfu-doc-delay 0.5)
+  (corfu-doc-max-width 70)
+  (corfu-doc-max-height 20)
+  :config
+  ;; Use C-c d to toggle documentation popup manually
+  (define-key corfu-map (kbd "C-c d") #'corfu-doc-toggle))
 
 (use-package cape)
 
