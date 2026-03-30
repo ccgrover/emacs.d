@@ -10,7 +10,7 @@
  '(dap-java-hot-reload 'never)
  '(denote-known-keywords
    '("1x1" "book club" "emacs" "workspace" "presentation"
-     "quarterly connections" "java" "spring" "user story"))
+     "quarterly connections" "java" "spring" "user story" "hackathon"))
  '(lisp-indent-offset nil)
  '(lsp-java-configuration-maven-user-settings "~/.m2/settings.xml")
  '(lsp-server-trace "verbose")
