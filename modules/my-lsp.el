@@ -72,7 +72,10 @@
           '(orderless))
     ;; Optionally configure the first word as flex filtered.
     (setq-local orderless-style-dispatchers (list #'my/orderless-dispatch-flex-first))
-    (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point))))
+    ;; Use debounced completion to reduce LSP server load
+    (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point)))
+    ;; Increase company-like debounce for LSP completion
+    (setq-local lsp-completion-no-cache nil)) ; enable caching
 
   :hook
   (lsp-completion-mode . my/lsp-mode-setup-completion)
@@ -81,13 +84,21 @@
               (("C-M-g" . lsp-find-implementation)
                ("C-<return>" . lsp-execute-code-action)))
   :custom (
-           (lsp-idle-delay 0.500)
+           ;; Increase idle delay to reduce LSP server load
+           (lsp-idle-delay 1.0)
            (lsp-disabled-clients '(semgrep-ls))
            (lsp-enable-file-watchers nil)
            (lsp-headerline-breadcrumb-enable nil)
            (lsp-completion-enable t)
            ;; additional performance optimizations
-           (lsp-enable-on-type-formatting nil))
+           (lsp-enable-on-type-formatting nil)
+           ;; Disable expensive LSP features
+           (lsp-enable-symbol-highlighting nil)  ;; disable document highlight
+           (lsp-lens-enable nil)                 ;; disable code lenses
+           (lsp-signature-auto-activate nil)     ;; disable signature help on typing
+           (lsp-signature-render-documentation nil)
+           (lsp-completion-show-detail nil)      ;; reduce completion detail
+           (lsp-completion-show-kind nil))
   :hook (lsp-mode . lsp-enable-which-key-integration))
 
 (use-package which-key
@@ -98,10 +109,15 @@
 
 (use-package lsp-ui
   :custom
-  ;; Disable automatic code action requests to reduce server load
-  (lsp-ui-sideline-delay 1.0)
-  (lsp-ui-sideline-update-mode 'line) ;; update on line change
-  (lsp-modeline-code-actions-enable nil))
+  ;; Reduce sideline update frequency to improve performance
+  (lsp-ui-sideline-enable t)
+  (lsp-ui-sideline-delay 2.0)
+  (lsp-ui-sideline-update-mode 'point)      ;; only update when cursor moves
+  (lsp-ui-sideline-show-hover nil)          ;; disable hover info
+  (lsp-ui-sideline-show-code-actions nil)   ;; disable code actions
+  (lsp-modeline-code-actions-enable nil)
+  (lsp-ui-doc-enable nil)                   ;; disable hover doc popup
+  (lsp-ui-doc-delay 2.0))
 
 (use-package lsp-java
   ;; use melpa over melpa-stable for newer features
@@ -118,7 +134,9 @@
         ;; set to "verbose" for troubleshooting, otherwise "off"
         lsp-java-trace-server "off"
         ;; fewer max completion candidates for performance
-        lsp-java-completion-max-results 20
+        lsp-java-completion-max-results 15  ; reduced from 20
+        ;; reduce completion overhead
+        lsp-java-completion-guess-method-arguments nil
         ;; disable formatting to possibly save some time and hassle
         lsp-java-format-enabled nil
         lsp-java-format-on-type-enabled nil

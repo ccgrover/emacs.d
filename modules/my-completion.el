@@ -29,6 +29,10 @@
 ;; Marginalia adds rich annotations in the minibuffer
 
 (use-package marginalia
+  :custom
+  ;; Reduce annotation detail for better performance
+  (marginalia-max-relative-age 0)  ; disable relative age calculations
+  (marginalia-align 'right)         ; simpler alignment
   :init
   (marginalia-mode))
 
@@ -40,7 +44,9 @@
   :custom (corfu-cycle t)        ; Allows cycling through candidates
   :custom (corfu-auto t)         ; Enable auto completion
   :custom (corfu-auto-prefix 3)  ; minimum number of characters
-  :custom (corfu-auto-delay 0.2) ; delay before completion candidates appear
+  :custom (corfu-auto-delay 0.3) ; increased delay to reduce LSP requests
+  :custom (corfu-min-width 20)   ; reduce popup calculations
+  :custom (corfu-preselect 'prompt) ; don't auto-select first candidate
   )
 
 ;; Add icons to Corfu completions
@@ -57,7 +63,8 @@
   :after corfu
   :hook (corfu-mode . corfu-popupinfo-mode)
   :custom
-  (corfu-popupinfo-delay 0.5)
+  (corfu-popupinfo-delay 1.0)  ; increased delay to reduce overhead
+  (corfu-popupinfo-max-height 20) ; limit popup size calculations
   :config
   ;; Use C-c d to toggle documentation popup manually
   (define-key corfu-map (kbd "C-c d") #'corfu-popupinfo-toggle))
