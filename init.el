@@ -15,10 +15,9 @@
   (load custom-file nil :nomessage))
 
 ;; add my own custom modules to the load path
-(let ((modules (expand-file-name "./modules/" user-emacs-directory)))
-  (when (file-directory-p modules)
-    (message "adding modules to load-path: %s" modules)
-    (add-to-list 'load-path modules)))
+;; eval-and-compile ensures this happens at both compile-time and runtime
+(eval-and-compile
+  (add-to-list 'load-path (expand-file-name "modules" user-emacs-directory)))
 
 ;; Adjust garbage collection threshold for early startup
 (setq gc-cons-threshold (* 128 1024 1024))
