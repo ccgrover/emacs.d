@@ -48,6 +48,10 @@
 
 (use-package yaml-mode)
 
+;; vlf - very large files
+
+(use-package vlf)
+
 ;; mc
 
 (use-package multiple-cursors)
