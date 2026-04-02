@@ -60,7 +60,7 @@
   :config
   (defun my/set-denote-dir (orig-fun &rest args)
     "Call ORIG-FUN with ARGS using the `pages' subdir for denote."
-    (let ((denote-use-directory (expand-file-name "pages" denote-directory)))
+    (let ((denote-directory (expand-file-name "pages" denote-directory)))
       (apply orig-fun args)))
   (setq denote-directory (expand-file-name my-notes-directory))
   ;; also customize 'denote-known-keywords' for a controlled vocabulary for keywords

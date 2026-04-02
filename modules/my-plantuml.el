@@ -12,14 +12,13 @@
   :group 'my-emacs)
 
 (use-package plantuml-mode
+  :mode ("\\.puml\\'" . plantuml-mode)
   :config
   ;; Only configure jar path if it exists
   (when (file-exists-p (expand-file-name my-plantuml-jar-path))
     (setq plantuml-jar-path my-plantuml-jar-path)
     (setq plantuml-default-exec-mode 'jar))
   ;; (setq plantuml-output-type "png")
-
-  (add-to-list 'auto-mode-alist '("\\.puml\\'" . plantuml-mode))
 
   ;; Fix completion to use modern completion-at-point instead of obsolete function
   (defun my/plantuml-completion-at-point-fixed ()

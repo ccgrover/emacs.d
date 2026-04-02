@@ -73,7 +73,9 @@
     ;; Optionally configure the first word as flex filtered.
     (setq-local orderless-style-dispatchers (list #'my/orderless-dispatch-flex-first))
     ;; Use debounced completion to reduce LSP server load
-    (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point)))
+    (setq-local completion-at-point-functions
+                (cons (cape-capf-buster #'lsp-completion-at-point)
+                      (remove #'lsp-completion-at-point completion-at-point-functions)))
     ;; Increase company-like debounce for LSP completion
     (setq-local lsp-completion-no-cache nil)) ; enable caching
 
@@ -151,10 +153,10 @@
         ;; Maven settings
         ;; lsp-java-configuration-maven-user-settings "~/.m2/settings.xml"
         lsp-java-configuration-runtimes '[(:name "JavaSE-17"
-                                                 :path "~/.sdkman/candidates/java/17.0.17-tem/"
-                                                 :default t)
+                                                 :path "/home/cgrover/.sdkman/candidates/java/17.0.17-tem/")
                                           (:name "JavaSE-21"
-                                                 :path "~/.sdkman/candidates/java/21.0.9-tem")]
+                                                 :path "/home/cgrover/.sdkman/candidates/java/21.0.9-tem/"
+                                                 :default t)]
         ;; VM args for performance and lombok
         ;; https://github.com/eclipse-jdtls/eclipse.jdt.ls/issues/1469
         lsp-java-vmargs
@@ -168,7 +170,7 @@
                "-XX:+UseStringDeduplication")
          ;; Only add lombok if path is configured
          (when my-lombok-path
-           (list (concat "-javaagent:" my-lombok-path))))
+           (list (concat "-javaagent:" (expand-file-name my-lombok-path)))))
         ;; customize static imports for completion
         lsp-java-completion-favorite-static-members
         (vconcat '(

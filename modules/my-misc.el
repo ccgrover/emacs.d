@@ -25,6 +25,7 @@
 
 ;; backup behavior
 
+(make-directory "~/.file_backups" t)
 (setq backup-directory-alist `(("." . "~/.file_backups")))
 (setq backup-by-copying-when-linked t)
 
@@ -85,8 +86,7 @@
 ;; fix path stuff
 
 (use-package exec-path-from-shell
-  :init
-  (require 'exec-path-from-shell)
+  :config
   (dolist (var '("SNOWFLAKE_USER"))
     (add-to-list 'exec-path-from-shell-variables var))
   (exec-path-from-shell-initialize))

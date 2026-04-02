@@ -9,11 +9,14 @@
 ;;  Copied from https://github.com/CyberShadow/dbt-mode/blob/master/dbt-mode.el
 ;;  Has a hard time getting that repo to work with "use-package" + ":vc"
 
-(use-package jinja2-mode)
+(use-package jinja2-mode
+  :defer t)
 
 (use-package polymode
   :after jinja2-mode
-  :defer nil
+  :init
+  (add-to-list 'auto-mode-alist
+               '("/\\(dbt\\|queries\\|macros\\|dbt_modules\\)/.*\\.sql\\'" . dbt-mode))
   :config
   (define-hostmode dbt/sql-hostmode
                    :mode 'sql-mode)
@@ -37,8 +40,6 @@
   (define-polymode dbt-mode
                    :hostmode 'dbt/sql-hostmode
                    :innermodes '(dbt/sql-jinja2-comments-innermode
-                                 dbt/sql-jinja2-innermode))
-  (add-to-list 'auto-mode-alist
-               '("/\\(dbt\\|queries\\|macros\\|dbt_modules\\)/.*\\.sql\\'" . dbt-mode)))
+                                 dbt/sql-jinja2-innermode)))
 (provide 'my-dbt)
 ;;; my-dbt.el ends here
