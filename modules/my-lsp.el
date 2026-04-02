@@ -213,7 +213,51 @@
   (define-key lsp-mode-map [remap xref-find-apropos]
               #'consult-lsp-symbols))
 
-(use-package lsp-treemacs)
+;; Treemacs - file tree explorer with projectile integration
+(use-package treemacs
+  :custom
+  ;; Visual and layout settings
+  (treemacs-width 35)
+  (treemacs-position 'left)
+  (treemacs-is-never-other-window t)
+  (treemacs-no-delete-other-windows t)
+
+  ;; Display behavior
+  (treemacs-sorting 'alphabetic-asc)
+  (treemacs-follow-after-init nil)
+  (treemacs-expand-after-init t)
+  (treemacs-expand-added-projects t)
+  (treemacs-recenter-after-file-follow nil)
+
+  ;; Project follow settings
+  (treemacs-project-follow-cleanup nil)
+  (treemacs-project-follow-into-home nil)
+
+  ;; File follow settings
+  (treemacs-file-follow-delay 0.2)
+
+  ;; Workspace persistence
+  (treemacs-persist-file (expand-file-name ".treemacs-persist" user-emacs-directory))
+
+  :bind
+  (("M-0" . treemacs)
+   ("C-c t 0" . treemacs-select-window))
+
+  :config
+  ;; Enable follow modes for automatic synchronization
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t)
+  (treemacs-project-follow-mode t))
+
+;; Projectile integration for treemacs
+(use-package treemacs-projectile
+  :after (treemacs projectile)
+  :bind
+  (("C-c p t" . treemacs-projectile)))
+
+;; LSP integration for treemacs
+(use-package lsp-treemacs
+  :after (lsp-mode treemacs))
 
 ;; lsp-sonarlint disabled for performance - use flycheck/checkstyle instead
 ;; (use-package lsp-sonarlint
