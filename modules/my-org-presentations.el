@@ -8,6 +8,8 @@
 
 ;;; Code:
 
+(require 'my-appearance)  ; For my-variable-width-font
+
 (use-package org-faces
   :ensure nil ; built-in?
   :config

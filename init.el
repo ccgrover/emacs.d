@@ -33,6 +33,11 @@
   (setq auto-package-update-hide-results nil)
   (auto-package-update-maybe))
 
+;; Use gcmh for automatic GC management
+(use-package gcmh
+  :config
+  (gcmh-mode 1))
+
 (defgroup my-emacs nil
   "Custom variables used within this config and its modules."
   :group 'emacs
@@ -48,13 +53,13 @@
 (require 'my-markdown)
 (require 'my-lsp)
 (require 'my-python)
-(require 'my-yaml)
 (require 'my-llm)
 (require 'my-dbt)
-(require 'my-snowflake)
+
+;; Enable downcase/upcase region commands
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
 
 ;;; _
 (provide 'init)
 ;;; init.el ends here
-(put 'downcase-region 'disabled nil)
-(put 'upcase-region 'disabled nil)

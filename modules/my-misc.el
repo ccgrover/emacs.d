@@ -56,13 +56,6 @@
 
 (use-package multiple-cursors)
 
-;; save minibuffer history
-
-(use-package savehist
-  :ensure nil
-  :init
-  (savehist-mode))
-
 ;; enable repeat mode! handy for scrolling through buffers with left/right
 
 (repeat-mode 1)
@@ -81,7 +74,13 @@
 
 ;; clickable links!
 
-(goto-address-mode 1)
+(global-goto-address-mode 1)
+
+;; editorconfig support globally
+
+(use-package editorconfig
+  :config
+  (editorconfig-mode 1))
 
 ;; fix path stuff
 

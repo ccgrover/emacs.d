@@ -14,7 +14,7 @@
 
 ;; generic performance-related config
 
-(setq gc-cons-threshold (* 100 1024 1024)) ;; 100mb
+;; GC is now managed by gcmh package in init.el
 (setq read-process-output-max (* 10 1024 1024)) ;; 10mb
 (setq process-adaptive-read-buffering nil)
 
@@ -125,7 +125,7 @@
   :hook ((java-mode . lsp)
          (java-ts-mode . lsp)
          ;; lsp-lens-mode disabled for performance
-         (lsp-mode . editorconfig-mode)
+         ;; editorconfig now enabled globally in my-misc.el
          ;; lsp-java-boot-lens-mode disabled for performance
          )
   ;; use setq instead of :custom so we can just append to vector variables
@@ -158,14 +158,17 @@
         ;; VM args for performance and lombok
         ;; https://github.com/eclipse-jdtls/eclipse.jdt.ls/issues/1469
         lsp-java-vmargs
-        (list "-XX:+UseParallelGC"
-              "-XX:GCTimeRatio=4"
-              "-XX:AdaptiveSizePolicyWeight=90"
-              "-Dsun.zip.disableMemoryMapping=true"
-              "-Xmx8G"
-              "-Xms100m"
-              "-XX:+UseStringDeduplication"
-              (concat "-javaagent:" my-lombok-path))
+        (append
+         (list "-XX:+UseParallelGC"
+               "-XX:GCTimeRatio=4"
+               "-XX:AdaptiveSizePolicyWeight=90"
+               "-Dsun.zip.disableMemoryMapping=true"
+               "-Xmx8G"
+               "-Xms100m"
+               "-XX:+UseStringDeduplication")
+         ;; Only add lombok if path is configured
+         (when my-lombok-path
+           (list (concat "-javaagent:" my-lombok-path))))
         ;; customize static imports for completion
         lsp-java-completion-favorite-static-members
         (vconcat '(

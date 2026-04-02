@@ -7,14 +7,16 @@
 ;;; Code:
 
 (defcustom my-plantuml-jar-path "~/Tools/plantuml/plantuml.jar"
-  "The font to use for monospaced (fixed width) text."
+  "Path to the PlantUML jar file."
   :type '(string)
   :group 'my-emacs)
 
 (use-package plantuml-mode
   :config
-  (setq plantuml-jar-path my-plantuml-jar-path)
-  (setq plantuml-default-exec-mode 'jar)
+  ;; Only configure jar path if it exists
+  (when (file-exists-p (expand-file-name my-plantuml-jar-path))
+    (setq plantuml-jar-path my-plantuml-jar-path)
+    (setq plantuml-default-exec-mode 'jar))
   ;; (setq plantuml-output-type "png")
 
   (add-to-list 'auto-mode-alist '("\\.puml\\'" . plantuml-mode))
