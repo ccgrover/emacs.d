@@ -180,6 +180,14 @@
         lsp-java-configuration-workspace-cache-limit 90  ; Keep cache for 90 days
         ;; Reduce auto-build overhead on startup
         lsp-java-autobuild-enabled nil  ; Disable auto-build to reduce startup indexing
+        ;; Generated sources handling
+        ;; Exclude build artifacts and IDE files from workspace monitoring
+        ;; Note: Generated sources in target/generated-sources are still
+        ;; indexed via Maven configuration, just not actively watched
+        lsp-java-project-resource-filters
+        (vconcat '["node_modules" ".metadata" "archetype-resources" "META-INF/maven"
+                   "target/classes" "target/test-classes" "target/maven-status"
+                   "bin" ".settings"])
         ;; fewer max completion candidates for performance
         lsp-java-completion-max-results 15  ; reduced from 20
         ;; reduce completion overhead
