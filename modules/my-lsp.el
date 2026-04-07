@@ -121,8 +121,8 @@
            (lsp-lens-enable nil)                 ;; disable code lenses
            (lsp-signature-auto-activate nil)     ;; disable signature help on typing
            (lsp-signature-render-documentation nil)
-           (lsp-completion-show-detail nil)      ;; reduce completion detail
-           (lsp-completion-show-kind nil)
+           (lsp-completion-show-detail t)        ;; reduce completion detail
+           (lsp-completion-show-kind t)
            ;; Critical performance fixes from profiler analysis
            (lsp-enable-text-document-color-provider nil)  ;; expensive and rarely needed
            (lsp-enable-folding nil)              ;; rarely used, often expensive
