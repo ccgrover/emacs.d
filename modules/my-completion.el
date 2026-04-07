@@ -18,6 +18,16 @@
   :init
   (vertico-mode))
 
+;; Better file path navigation in vertico
+(use-package vertico-directory
+  :ensure nil  ;; built into vertico
+  :after vertico
+  :bind (:map vertico-map
+              ("C-l" . vertico-directory-up)           ;; Go up directory
+              ("C-DEL" . vertico-directory-delete-word) ;; Delete word/path component
+              ("M-DEL" . vertico-directory-delete-word))
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 
 (use-package savehist
@@ -41,12 +51,15 @@
 (use-package corfu
   :init (global-corfu-mode 1)
   ;; global-completion-preview-mode disabled for performance
-  :custom (corfu-cycle t)        ; Allows cycling through candidates
-  :custom (corfu-auto t)         ; Enable auto completion
-  :custom (corfu-auto-prefix 3)  ; minimum number of characters
-  :custom (corfu-auto-delay 0.3) ; increased delay to reduce LSP requests
-  :custom (corfu-min-width 20)   ; reduce popup calculations
+  :custom (corfu-cycle t)           ; Allows cycling through candidates
+  :custom (corfu-auto t)            ; Enable auto completion
+  :custom (corfu-auto-prefix 3)     ; minimum number of characters
+  :custom (corfu-auto-delay 0.8)    ; increased from 0.3 to reduce LSP load
+  :custom (corfu-min-width 20)      ; reduce popup calculations
   :custom (corfu-preselect 'prompt) ; don't auto-select first candidate
+  ;; Quit completion more aggressively to avoid stale popups
+  :custom (corfu-quit-at-boundary 'separator)
+  :custom (corfu-quit-no-match t)
   )
 
 ;; Add icons to Corfu completions

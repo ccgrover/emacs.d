@@ -1,0 +1,274 @@
+#+TITLE: Debugging JDTLS Performance Issues
+#+AUTHOR: Generated for debugging Eclipse JDT Language Server performance
+#+DATE: 2026-04-06
+
+This guide helps you identify why the Eclipse JDT Language Server might be slow.
+
+* Quick Diagnostics
+
+** 1. Enable LSP Request Timing
+
+In ~modules/my-lsp.el~, temporarily change:
+#+begin_src elisp
+(lsp-print-performance nil)  → (lsp-print-performance t)
+#+end_src
+
+Then check ~*Messages*~ buffer for timing info like:
+#+begin_example
+[Trace - 10:30:45 AM] Received response 'textDocument/completion' in 2500ms
+#+end_example
+
+Times > 500ms indicate server slowness.
+
+** 2. Enable Detailed Server Logging
+
+Change in ~modules/my-lsp.el~:
+#+begin_src elisp
+lsp-java-trace-server "off"  → lsp-java-trace-server "verbose"
+#+end_src
+
+Restart Emacs, open a Java file, then check:
+- Buffer: ~*lsp-log*~ - Shows all LSP communication
+- File: =~/.emacs.d/workspace/.metadata/.log= - JDTLS internal logs
+
+Look for:
+- Repeated error messages
+- "Building workspace" (happens during indexing)
+- OutOfMemoryError exceptions
+- Long-running operations
+
+** 3. Check JDTLS Process Resource Usage
+
+While Emacs is open with a Java file:
+
+#+begin_src bash
+# Find the JDTLS process
+ps aux | grep jdtls
+
+# Monitor continuously (updates every 2 seconds)
+watch -n 2 "ps aux | grep jdtls"
+
+# Check detailed stats
+top -p $(pgrep -f jdtls)
+#+end_src
+
+*Red flags:*
+- *CPU > 100%*: Server is working hard (indexing, building)
+- *Memory near -Xmx limit (8GB)*: Might need more RAM
+- *Process restarting frequently*: Check for crashes in logs
+
+** 4. Enable Full LSP I/O Logging (Very Verbose!)
+
+*WARNING:* This creates massive output and slows Emacs. Only enable briefly.
+
+In ~modules/my-lsp.el~:
+#+begin_src elisp
+(lsp-log-io nil)  → (lsp-log-io t)
+#+end_src
+
+Restart Emacs, reproduce the freeze, then:
+1. Check ~*lsp-log*~ buffer
+2. Search for requests that took a long time
+3. Look for ~textDocument/completion~ requests during your freeze
+
+** 5. Check JDTLS Workspace State
+
+#+begin_src bash
+# Check workspace directory
+ls -lh ~/.emacs.d/workspace/
+
+# Look for large .metadata directories (indicates indexing issues)
+du -sh ~/.emacs.d/workspace/.metadata/
+
+# Check for error markers
+cat ~/.emacs.d/workspace/.metadata/.log | grep -i error | tail -20
+#+end_src
+
+*If .metadata is > 2GB:* Consider cleaning the workspace:
+#+begin_src bash
+# CAUTION: This removes all indexed data
+rm -rf ~/.emacs.d/workspace/.metadata/
+# Server will re-index on next start (slow but fresh)
+#+end_src
+
+* Common Performance Issues
+
+** Issue 1: Initial Workspace Indexing
+
+*Symptoms:* Slow for 2-5 minutes after opening a project
+
+*Solution:* Wait for indexing to complete. Check progress:
+#+begin_src elisp
+M-x lsp-workspace-show-log
+#+end_src
+
+Look for "Starting Java Language Server" → "ServiceReady"
+
+** Issue 2: Large Maven Dependencies
+
+*Symptoms:* Slow completion, high memory usage
+
+*Current config:*
+#+begin_src elisp
+lsp-java-maven-download-sources nil  ; Good - sources add overhead
+#+end_src
+
+*Additional optimization:*
+#+begin_src elisp
+;; Add to lsp-java config in modules/my-lsp.el
+lsp-java-import-maven-enabled t
+lsp-java-maven-update-snapshots nil  ; Don't check for snapshot updates
+lsp-java-autobuild-enabled nil       ; Disable auto-build (use manual build)
+#+end_src
+
+** Issue 3: Too Many Open Buffers/Projects
+
+JDTLS creates a workspace per project root.
+
+*Check:*
+#+begin_src elisp
+M-: (hash-table-count lsp--session-file-to-folder)
+#+end_src
+
+*If > 5:* Close unused Java buffers and run:
+#+begin_src elisp
+M-x lsp-workspace-folders-remove
+#+end_src
+
+** Issue 4: Lombok Processing
+
+If using Lombok (configured in vmargs), it can slow annotation processing.
+
+*Test without Lombok:*
+Temporarily comment out in ~modules/my-lsp.el~:
+#+begin_src elisp
+;; (when my-lombok-path
+;;   (list (concat "-javaagent:" (expand-file-name my-lombok-path))))
+#+end_src
+
+** Issue 5: Null Analysis Overhead
+
+*Current setting:*
+#+begin_src elisp
+lsp-java-compile-null-analysis-mode "automatic"
+#+end_src
+
+*If slow, try:*
+#+begin_src elisp
+lsp-java-compile-null-analysis-mode "disabled"
+#+end_src
+
+* Performance Tuning Options
+
+** Option 1: Increase JDTLS Memory
+
+Current: ~-Xmx8G~ (8GB max heap)
+
+If your system has RAM available:
+#+begin_src elisp
+;; In modules/my-lsp.el, change -Xmx8G to:
+"-Xmx12G"  ; if you have 32GB+ system RAM
+#+end_src
+
+** Option 2: Disable Expensive Features
+
+Add to ~lsp-java-vmargs~:
+#+begin_src elisp
+"-Djdt.ls.lombokSupport.enabled=false"  ; if not using Lombok
+"-Declipse.application.registerDescriptors=false"
+#+end_src
+
+** Option 3: Limit Completion Results
+
+Already configured at 15, but can reduce further:
+#+begin_src elisp
+lsp-java-completion-max-results 10  ; from 15 to 10
+#+end_src
+
+** Option 4: Use Minimal JDTLS Features
+
+#+begin_src elisp
+;; Add to lsp-java config
+lsp-java-code-generation-use-blocks t
+lsp-java-save-actions-organize-imports nil  ; disable auto-organize
+lsp-java-references-code-lens-enabled nil
+lsp-java-implementations-code-lens-enabled nil
+#+end_src
+
+* Measuring Improvements
+
+** Before/After Comparison
+
+1. *Enable timing:*
+   #+begin_src elisp
+   (setq lsp-print-performance t)
+   #+end_src
+
+2. *Test completion speed:*
+   - Open a large Java file
+   - Type a method name + ~.~
+   - Note time in ~*Messages*~: "Received response 'textDocument/completion' in XXXms"
+
+3. *Target times:*
+   - *Good:* < 200ms
+   - *Acceptable:* 200-500ms
+   - *Slow:* > 500ms
+   - *Problematic:* > 1000ms
+
+** Quick Performance Test
+
+#+begin_src elisp
+;; Run this in *scratch* buffer or with M-:
+(benchmark-run 5
+  (with-current-buffer (find-file-noselect "~/Workspace/ibm-entitlement-gateway/src/main/java/SomeFile.java")
+    (goto-char (point-max))
+    (insert "System.")
+    (completion-at-point)
+    (delete-char -7)))
+#+end_src
+
+This runs completion 5 times and shows average time.
+
+* Emergency Performance Mode
+
+If JDTLS is unusable, temporarily disable LSP completion:
+
+#+begin_src elisp
+;; Add to modules/my-lsp.el
+(setq lsp-completion-enable nil)
+#+end_src
+
+Then use basic completion:
+- ~M-/~ (dabbrev-expand) - completes from open buffers
+- ~C-M-i~ (complete-symbol) - basic semantic completion
+- Tags-based completion (requires TAGS file)
+
+* Next Steps
+
+After enabling diagnostics:
+1. Open a Java file where you experience slowness
+2. Trigger completion (type something and wait)
+3. Check timing in ~*Messages*~
+4. Review ~*lsp-log*~ for what requests were made
+5. Check ~ps aux | grep jdtls~ for resource usage
+6. Share findings if you need help interpreting results
+
+* Useful Commands
+
+#+begin_src elisp
+M-x lsp-describe-session          ; Show LSP server status
+M-x lsp-workspace-show-log        ; Show server output
+M-x lsp-workspace-restart         ; Restart LSP server
+M-x lsp-workspace-folders-remove  ; Close workspace
+M-x lsp-install-server            ; Update JDTLS version
+#+end_src
+
+* Logging Cleanup
+
+When done debugging, revert to performance settings:
+
+#+begin_src elisp
+(setq lsp-log-io nil)
+(setq lsp-print-performance nil)
+(setq lsp-java-trace-server "off")
+#+end_src

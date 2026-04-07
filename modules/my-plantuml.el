@@ -44,6 +44,7 @@ Original uses `beginning-of-thing' and `end-of-thing' which move point as a side
 
   (add-hook 'plantuml-mode-hook #'my/plantuml-setup-completion)
   (add-hook 'plantuml-mode-hook #'my/plantuml-disable-electric-indent)
+  (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 
   (org-babel-do-load-languages
    'org-babel-load-languages

@@ -54,7 +54,12 @@
          ("M-n"  . flycheck-next-error)
          ("M-p"  . flycheck-previous-error))
   :hook (flycheck-mode . flycheck-set-indication-mode)
-  :custom (flycheck-indication-mode 'left-margin)
+  :custom
+  (flycheck-indication-mode 'left-margin)
+  ;; Increase debounce to reduce overhead - profiler showed frequent checks
+  (flycheck-check-syntax-automatically '(save mode-enabled))  ;; only check on save
+  (flycheck-idle-change-delay 2.0)       ;; increase delay if adding 'idle-change back
+  (flycheck-idle-buffer-switch-delay 2.0)
   :config (global-flycheck-mode))
 
 (use-package yasnippet
@@ -67,27 +72,44 @@
   :init
   (defun my/orderless-dispatch-flex-first (_pattern index _total)
     (and (eq index 0) 'orderless-flex))
+
+  ;; CRITICAL: Prevent LSP from running in minibuffer
   (defun my/lsp-mode-setup-completion ()
-    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-          '(orderless))
-    ;; Optionally configure the first word as flex filtered.
-    (setq-local orderless-style-dispatchers (list #'my/orderless-dispatch-flex-first))
-    ;; Use debounced completion to reduce LSP server load
-    (setq-local completion-at-point-functions
-                (cons (cape-capf-buster #'lsp-completion-at-point)
-                      (remove #'lsp-completion-at-point completion-at-point-functions)))
-    ;; Increase company-like debounce for LSP completion
-    (setq-local lsp-completion-no-cache nil)) ; enable caching
+    ;; Only set up LSP completion if NOT in minibuffer
+    (unless (minibufferp)
+      (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+            '(orderless))
+      ;; Optionally configure the first word as flex filtered.
+      (setq-local orderless-style-dispatchers (list #'my/orderless-dispatch-flex-first))
+      ;; Use debounced completion to reduce LSP server load
+      (setq-local completion-at-point-functions
+                  (cons (cape-capf-buster #'lsp-completion-at-point)
+                        (remove #'lsp-completion-at-point completion-at-point-functions)))
+      ;; Increase company-like debounce for LSP completion
+      (setq-local lsp-completion-no-cache nil)))
 
   :hook
   (lsp-completion-mode . my/lsp-mode-setup-completion)
-  :init (setq lsp-keymap-prefix "C-c l")
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+
+  ;; CRITICAL: Never activate LSP in minibuffer - prevents freeze during M-x
+  (defun my/lsp-prevent-minibuffer ()
+    "Prevent LSP mode from activating in minibuffer."
+    (when (minibufferp)
+      (setq-local lsp-mode nil)
+      (setq-local completion-at-point-functions
+                  (remove #'lsp-completion-at-point completion-at-point-functions))))
+
+  (add-hook 'minibuffer-setup-hook #'my/lsp-prevent-minibuffer)
   :bind (:map lsp-mode-map
               (("C-M-g" . lsp-find-implementation)
                ("C-<return>" . lsp-execute-code-action)))
   :custom (
            ;; Increase idle delay to reduce LSP server load
            (lsp-idle-delay 1.0)
+           ;; Critical: Reduce timeout to prevent long blocking
+           (lsp-response-timeout 5)      ; reduce from 10s to 5s timeout
            (lsp-disabled-clients '(semgrep-ls))
            (lsp-enable-file-watchers nil)
            (lsp-headerline-breadcrumb-enable nil)
@@ -100,7 +122,25 @@
            (lsp-signature-auto-activate nil)     ;; disable signature help on typing
            (lsp-signature-render-documentation nil)
            (lsp-completion-show-detail nil)      ;; reduce completion detail
-           (lsp-completion-show-kind nil))
+           (lsp-completion-show-kind nil)
+           ;; Critical performance fixes from profiler analysis
+           (lsp-enable-text-document-color-provider nil)  ;; expensive and rarely needed
+           (lsp-enable-folding nil)              ;; rarely used, often expensive
+           (lsp-enable-indentation nil)          ;; we use treesit-indent
+           (lsp-enable-links nil)                ;; links parsing can be expensive
+           (lsp-modeline-diagnostics-enable nil) ;; reduce modeline overhead
+           ;; Enable I/O logging when debugging - creates *lsp-log* buffer
+           ;; WARNING: This is VERY verbose and will impact performance
+           ;; For timing info: temporarily set to t, then back to nil
+           (lsp-log-io nil)                      ;; disable full I/O logging
+           ;; Server-side tracing (less verbose than lsp-log-io)
+           (lsp-server-trace nil)                ;; "messages" or "verbose" for debugging
+           ;; Reduce diagnostic overhead - major memory issue in profiler
+           (lsp-diagnostics-provider :flycheck)  ;; use flycheck for display
+           (lsp-diagnostics-modeline-scope :project) ;; reduce diagnostic scope
+           ;; Disable synchronous operations before save
+           (lsp-before-save-edits nil)           ;; formatting on save causes blocking requests
+           (lsp-auto-execute-action nil))
   :hook (lsp-mode . lsp-enable-which-key-integration))
 
 (use-package which-key
@@ -111,15 +151,15 @@
 
 (use-package lsp-ui
   :custom
-  ;; Reduce sideline update frequency to improve performance
-  (lsp-ui-sideline-enable t)
-  (lsp-ui-sideline-delay 2.0)
-  (lsp-ui-sideline-update-mode 'point)      ;; only update when cursor moves
-  (lsp-ui-sideline-show-hover nil)          ;; disable hover info
-  (lsp-ui-sideline-show-code-actions nil)   ;; disable code actions
+  ;; Disable sideline completely - showed up as expensive in profiler
+  (lsp-ui-sideline-enable nil)
+  (lsp-ui-sideline-show-hover nil)
+  (lsp-ui-sideline-show-code-actions nil)
   (lsp-modeline-code-actions-enable nil)
-  (lsp-ui-doc-enable nil)                   ;; disable hover doc popup
-  (lsp-ui-doc-delay 2.0))
+  ;; Keep doc disabled
+  (lsp-ui-doc-enable nil)
+  ;; Disable peek features for performance
+  (lsp-ui-peek-enable nil))
 
 (use-package lsp-java
   ;; use melpa over melpa-stable for newer features

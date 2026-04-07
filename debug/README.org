@@ -1,0 +1,184 @@
+#+TITLE: LSP Performance Troubleshooting Tools
+#+DATE: 2026-04-07
+
+This directory contains tools and documentation for debugging LSP/JDTLS performance issues.
+
+*Current Status:* All debug features are *DISABLED* by default for optimal performance.
+
+| Feature | Production (Default) | Debug Mode |
+|---------+---------------------+------------|
+| Timing Advice | Disabled | Load =lsp-timing-advice.el= |
+| Server Logging | ="off"= | ="verbose"= |
+| I/O Logging | =nil= | =t= (temporary only) |
+
+See [[*Enabling/Disabling Debug Features]] for how to enable when troubleshooting.
+
+* Tools
+
+** [[file:lsp-timing-advice.el][lsp-timing-advice.el]]
+Emacs Lisp advice that logs LSP request and validation timing to =*Messages*= buffer.
+
+*Loaded automatically* by =modules/my-lsp.el=
+
+Shows:
+- =[HH:MM:SS] [LSP Timing] method took XXXms= - Direct LSP requests
+- =[HH:MM:SS] [LSP Server] Validated N files in XXXms= - Server validation
+
+Only logs operations > 100ms (requests) or > 50ms (validation).
+
+** [[file:monitor-jdtls.sh][monitor-jdtls.sh]]
+Shell script to monitor JDTLS process CPU and memory usage in real-time.
+
+Usage:
+#+begin_src bash
+~/.emacs.d/debug/monitor-jdtls.sh
+#+end_src
+
+Shows:
+- Initial diagnostics (PID, memory, workspace size, recent errors)
+- Live monitoring (updates every 2 seconds)
+- CPU/memory percentage and status
+
+** [[file:wait-for-jdtls-ready.sh][wait-for-jdtls-ready.sh]]
+Shell script that waits for JDTLS to finish indexing and notifies when ready.
+
+Usage:
+#+begin_src bash
+~/.emacs.d/debug/wait-for-jdtls-ready.sh [threshold_cpu]
+#+end_src
+
+Features:
+- Monitors CPU until it drops below threshold (default: 20%)
+- Requires 3 stable checks (15 seconds)
+- Sends desktop notification when ready
+- Plays completion sound (if available)
+
+** [[file:test-lsp-timing.el][test-lsp-timing.el]]
+Test functions to verify LSP timing advice is working.
+
+Load in Emacs:
+#+begin_src elisp
+M-x load-file RET ~/.emacs.d/debug/test-lsp-timing.el RET
+#+end_src
+
+Then run:
+- =M-x test-lsp-timing= - Full test (multiple requests)
+- =M-x test-lsp-timing-simple= - Quick test (single completion request)
+
+* Documentation
+
+** [[file:DEBUG_JDTLS.org][DEBUG_JDTLS.org]]
+Comprehensive guide for debugging JDTLS performance issues.
+
+Topics covered:
+- Quick diagnostics (enable timing, server logs, process monitoring)
+- Common performance issues and solutions
+- Performance tuning options
+- Measuring improvements
+- Emergency performance mode
+
+* Workflow
+
+1. *Enable timing* - Already enabled via =my-lsp.el=
+2. *Monitor JDTLS* - Run =monitor-jdtls.sh= in separate terminal
+3. *Work normally* - Edit Java files, trigger completion, etc.
+4. *Check logs* - Look for timing messages in =*Messages*= buffer
+5. *Correlate* - Match timestamps between monitor and timing logs
+
+* Example Output
+
+** Terminal (monitor-jdtls.sh)
+#+begin_example
+HH:MM:SS   CPU%  MEM%  RSS(MB)  Status
+========================================================
+10:27:30   25.0   3.9     2516  ✓ OK
+10:27:32  180.5   3.9     2520  ⚠️  High CPU
+10:27:34   45.2   3.9     2518  ✓ OK
+#+end_example
+
+** Emacs *Messages* buffer
+#+begin_example
+[10:27:31] [LSP Timing] workspace/executeCommand took 101ms
+[10:27:32] [LSP Server] Validated 5 files in 447ms
+#+end_example
+
+This shows: At 10:27:32, validation caused the CPU spike to 180%.
+
+* Enabling/Disabling Debug Features
+
+By default, all debug features are *disabled* for optimal performance.
+
+** Enable Timing Advice (Recommended for Troubleshooting)
+
+Add to =modules/my-lsp.el= after the =;;; Code:= line:
+
+#+begin_src elisp
+;; Load timing advice for debugging
+(load-file (expand-file-name "debug/lsp-timing-advice.el" user-emacs-directory))
+#+end_src
+
+Then restart Emacs or evaluate:
+#+begin_src elisp
+M-: (load-file (expand-file-name "debug/lsp-timing-advice.el" user-emacs-directory))
+#+end_src
+
+To disable: Remove the above lines and restart Emacs.
+
+** Enable JDTLS Server Logging
+
+In =modules/my-lsp.el=, change:
+#+begin_src elisp
+lsp-java-trace-server "off"  →  lsp-java-trace-server "verbose"
+#+end_src
+
+Then restart LSP:
+#+begin_src elisp
+M-x lsp-workspace-restart
+#+end_src
+
+View logs in buffer: =*Eclipse JDT LS::stderr*=
+
+To disable: Change back to ="off"= and restart LSP.
+
+** Enable Full LSP I/O Logging (Very Verbose)
+
+Temporarily enable in Emacs:
+#+begin_src elisp
+M-: (setq lsp-log-io t)
+M-x lsp-workspace-restart
+#+end_src
+
+View logs in buffer: =*lsp-log*=
+
+*WARNING:* This is extremely verbose and impacts performance. Use only briefly.
+
+To disable:
+#+begin_src elisp
+M-: (setq lsp-log-io nil)
+M-x lsp-workspace-restart
+#+end_src
+
+** Enable All Debug Features at Once
+
+For comprehensive troubleshooting:
+
+1. Enable timing advice (add to =my-lsp.el=):
+   #+begin_src elisp
+   (load-file (expand-file-name "debug/lsp-timing-advice.el" user-emacs-directory))
+   #+end_src
+
+2. Enable server logging (in =my-lsp.el=):
+   #+begin_src elisp
+   lsp-java-trace-server "verbose"
+   #+end_src
+
+3. Start monitoring script in separate terminal:
+   #+begin_src bash
+   ~/.emacs.d/debug/monitor-jdtls.sh
+   #+end_src
+
+4. Restart Emacs
+
+5. Work normally and collect data
+
+6. Disable when done (revert changes, restart Emacs)
