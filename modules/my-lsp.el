@@ -175,6 +175,11 @@
   (setq lsp-java-maven-download-sources nil
         ;; set to "verbose" for troubleshooting, otherwise "off"
         lsp-java-trace-server "off"
+        ;; Workspace caching configuration
+        lsp-java-workspace-cache-dir (expand-file-name ".cache/" lsp-java-workspace-dir)
+        lsp-java-configuration-workspace-cache-limit 90  ; Keep cache for 90 days
+        ;; Reduce auto-build overhead on startup
+        lsp-java-autobuild-enabled nil  ; Disable auto-build to reduce startup indexing
         ;; fewer max completion candidates for performance
         lsp-java-completion-max-results 15  ; reduced from 20
         ;; reduce completion overhead
@@ -304,6 +309,21 @@
 ;;   :custom
 ;;   (lsp-sonarlint-enabled-analyzers '("java"))
 ;;   (lsp-sonarlint-auto-download t))
+
+;; Ensure clean JDTLS shutdown to preserve workspace state
+(defun my/lsp-java-clean-shutdown ()
+  "Notify LSP workspaces before shutdown to allow clean state save."
+  (when (and (featurep 'lsp-mode) (lsp-workspaces))
+    (message "Shutting down LSP workspaces...")
+    (lsp-foreach-workspace
+     (lambda (workspace)
+       (with-lsp-workspace workspace
+         ;; Send shutdown request
+         (lsp-request "shutdown" nil)
+         (lsp-notify "exit" nil))))
+    (sit-for 0.3)))  ; Brief pause to allow shutdown to complete
+
+(add-hook 'kill-emacs-hook #'my/lsp-java-clean-shutdown 90)
 
 (provide 'my-lsp)
 ;;; my-lsp.el ends here
