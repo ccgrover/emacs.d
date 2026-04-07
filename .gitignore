@@ -37,3 +37,4 @@ workspace/
 /projectile-bookmarks.eld
 /tramp
 /.org-id-locations
+.treemacs-persist
