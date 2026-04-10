@@ -46,7 +46,18 @@
     ;; Center org buffers and let lines wrap.
     (visual-fill-column-mode 1)
     (visual-line-mode 1))
-  (add-hook 'org-mode-hook 'my/center-org-buffers))
+  (defun my/org-disable-electric-indent ()
+    "Disable automatic indentation in org-mode.
+Prevents source blocks from auto-indenting when pressing Enter directly in the org file."
+    (electric-indent-local-mode -1))
+  (add-hook 'org-mode-hook 'my/center-org-buffers)
+  (add-hook 'org-mode-hook 'my/org-disable-electric-indent)
+  (defun my/update-org-statistics-on-save ()
+    "Update all org statistics cookies before saving."
+    (add-hook 'before-save-hook
+              (lambda () (org-update-statistics-cookies t))
+              nil t))
+  (add-hook 'org-mode-hook 'my/update-org-statistics-on-save))
 
 ;; https://protesilaos.com/emacs/denote
 (use-package denote
