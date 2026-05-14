@@ -70,6 +70,7 @@
 (require 'my-python)
 (require 'my-llm)
 (require 'my-dbt)
+(require 'my-terraform)
 
 ;; Enable downcase/upcase region commands
 (put 'downcase-region 'disabled nil)

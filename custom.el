@@ -14,7 +14,6 @@
      "meeting" "org"))
  '(lisp-indent-offset nil)
  '(lsp-java-configuration-maven-user-settings "~/.m2/settings.xml")
- '(lsp-server-trace "verbose")
  '(my-java-formatter-settings
    "/home/cgrover/tools/eclipseformatter/eclipse-java-google-style.xml")
  '(my-lombok-path "/home/cgrover/Tools/lombok/lombok.jar")
