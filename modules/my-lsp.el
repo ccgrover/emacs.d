@@ -195,6 +195,15 @@
         ;; disable formatting to possibly save some time and hassle
         lsp-java-format-enabled nil
         lsp-java-format-on-type-enabled nil
+        ;; Filter out ambiguous/unwanted types from import suggestions
+        ;; Prevents organize imports from failing on ambiguous types like Optional
+        lsp-java-completion-filtered-types
+        ;; java.util.Optional
+        (vconcat '("com.google.common.base.Optional"
+                   "org.testcontainers.shaded.*"
+                   "org.apache.el.*"
+                   "org.parboiled2.*")
+                 lsp-java-completion-filtered-types)
         ;; null analysis including JSpecify annotations
         lsp-java-compile-null-analysis-mode "automatic"
         lsp-java-compile-null-analysis-nonnull
