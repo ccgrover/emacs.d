@@ -34,7 +34,8 @@
   (global-treesit-auto-mode))
 
 
-(use-package ag)
+(use-package rg
+  :config (rg-enable-default-bindings))
 
 (use-package projectile
   :init
@@ -261,12 +262,22 @@
   :after lsp-mode
   :config (dap-auto-configure-mode))
 
+(defun my/mvn-force-test ()
+  "Run spotless:apply and test for the current buffer's test class, forcing recompilation."
+  (interactive)
+  (let* ((class-name (file-name-base (buffer-file-name)))
+         (project-root (projectile-project-root))
+         (cmd (format "mvn spotless:apply test -Dtest=%s" class-name)))
+    (let ((default-directory project-root))
+      (compile cmd))))
+
 (use-package dap-java
   :ensure nil
   :bind
   (("C-c t c" . dap-java-run-test-class)
    ("C-c t m" . dap-java-run-test-method)
-   ("C-c t t" . dap-java-run-last-test)))
+   ("C-c t t" . dap-java-run-last-test)
+   ("C-c t f" . my/mvn-force-test)))
 
 (use-package consult-lsp
   :defer nil

@@ -10,37 +10,11 @@
 
 (require 'my-appearance)  ; For my-variable-width-font
 
-(use-package org-faces
-  :ensure nil ; built-in?
-  :config
-
-  ;; Make the document title a bit bigger
-  (set-face-attribute 'org-document-title nil :font my-variable-width-font :weight 'bold :height 1.3)
-
-  ;; Make sure certain org faces use the fixed-pitch face when variable-pitch-mode is on
-  (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-formula nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
-
 (use-package org-present
   :config
   (defun my/org-present-start ()
     ;; ensure images are shown
     (org-display-inline-images)
-    ;; Tweak font sizes
-    (setq-local face-remapping-alist '((default (:height 1.5) variable-pitch)
-                                       (header-line (:height 4.0) variable-pitch)
-                                       (org-document-title (:height 1.75) org-document-title)
-                                       (org-code (:height 1.55) org-code)
-                                       (org-verbatim (:height 1.55) org-verbatim)
-                                       (org-block (:height 1.25) org-block)
-                                       (org-block-begin-line (:height 0.7) org-block)))
-    ;; Set a blank header line string to create blank space at the top
     (setq header-line-format " ")
     ;; narrower column width due give some centering
     (setq-local visual-fill-column-width 90
@@ -49,8 +23,6 @@
     (org-present-read-only))
 
   (defun my/org-present-end ()
-    ;; Reset font customizations
-    (setq-local face-remapping-alist '((default default)))
     ;; Clear the header line format by setting to `nil'
     (setq header-line-format nil)
     ;; back to defaults
