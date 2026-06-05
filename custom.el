@@ -9,9 +9,10 @@
      default))
  '(dap-java-hot-reload 'never)
  '(denote-known-keywords
-   '("1x1" "book club" "emacs" "workspace" "presentation"
-     "quarterly connections" "java" "spring" "user story" "hackathon"
-     "meeting" "org"))
+   '("1x1" "ai" "architecture" "aws" "bookclub" "dbt" "emacs"
+     "hackathon" "integration" "interview" "java" "jira" "learning"
+     "meeting" "microcks" "monitoring" "org" "presentation"
+     "quarterlyconnections" "research" "spring" "story" "testing"))
  '(lisp-indent-offset nil)
  '(lsp-java-configuration-maven-user-settings "~/.m2/settings.xml")
  '(my-java-formatter-settings
