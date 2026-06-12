@@ -11,6 +11,11 @@
   :type '(string)
   :group 'my-emacs)
 
+(defcustom my-todo-file (file-name-concat my-notes-directory "todo.org")
+  "File for todo items."
+  :type '(string)
+  :group 'my-emacs)
+
 (defcustom my-org-column-width 110
   "Column width (in chars) for `org-mode' buffers."
   :type '(integer)
@@ -20,8 +25,13 @@
   :ensure nil ; built-in
   :custom (org-directory my-notes-directory)
   :custom (org-agenda-files
-           (list org-directory))
+           (list my-todo-file))
   :custom (denote-date-prompt-use-org-read-date t)
+  :custom (org-capture-templates
+           '(("t" "todo" entry (file+headline my-todo-file "Tasks")
+              "* TODO %?\n  %i\n  %a")
+             ("i" "idea" entry (file+headline my-todo-file "Ideas")
+              "* TODO %?\n  %i\n  %a")))
   :config (org-babel-do-load-languages
            'org-babel-load-languages
            '((shell . t)
