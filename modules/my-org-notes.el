@@ -122,6 +122,9 @@ Prevents source blocks from auto-indenting when pressing Enter directly in the o
   ;; Read the doc string of `denote-journal-title-format'.
   (setq denote-journal-title-format 'day))
 
+(use-package ox-gfm
+  :after org)
+
 (use-package org-present)
 
 (provide 'my-org-notes)
