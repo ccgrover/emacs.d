@@ -11,8 +11,8 @@
   :type '(string)
   :group 'my-emacs)
 
-(defcustom my-todo-file (file-name-concat my-notes-directory "todo.org")
-  "File for todo items."
+(defcustom my-inbox-file (file-name-concat my-notes-directory "inbox.org")
+  "Catch-all file for one-off TODO items."
   :type '(string)
   :group 'my-emacs)
 
@@ -25,12 +25,12 @@
   :ensure nil ; built-in
   :custom (org-directory my-notes-directory)
   :custom (org-agenda-files
-           (list my-todo-file))
+           (list my-inbox-file))
   :custom (denote-date-prompt-use-org-read-date t)
   :custom (org-capture-templates
-           '(("t" "todo" entry (file+headline my-todo-file "Tasks")
+           '(("t" "todo" entry (file+headline my-inbox-file "Tasks")
               "* TODO %?\n  %i\n  %a")
-             ("i" "idea" entry (file+headline my-todo-file "Ideas")
+             ("i" "idea" entry (file+headline my-inbox-file "Ideas")
               "* TODO %?\n  %i\n  %a")))
   :config (org-babel-do-load-languages
            'org-babel-load-languages
@@ -84,10 +84,15 @@ Prevents source blocks from auto-indenting when pressing Enter directly in the o
     (let ((denote-directory (expand-file-name "pages" denote-directory)))
       (apply orig-fun args)))
   (setq denote-directory (expand-file-name my-notes-directory))
+  ;; ensure expected directories exist (safe on new machines)
+  (dolist (dir (list (expand-file-name my-notes-directory)
+                     (expand-file-name "pages" my-notes-directory)
+                     (expand-file-name "projects" my-notes-directory)))
+    (make-directory dir t))
   ;; also customize 'denote-known-keywords' for a controlled vocabulary for keywords
   (setq denote-infer-keywords nil)
-  ;; so TODOs appear in the agenda list
-  (push denote-directory org-agenda-files)
+  ;; scope agenda to project notes and inbox only (not permanent notes in pages/)
+  (push (expand-file-name "projects" my-notes-directory) org-agenda-files)
   ;; Renames buffer to "[D] <title>", instead of the scary name
   (denote-rename-buffer-mode 1)
   (advice-add 'denote :around #'my/set-denote-dir))
