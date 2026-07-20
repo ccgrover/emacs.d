@@ -37,6 +37,10 @@
            '((shell . t)
              (plantuml . t)))
   :config
+  ;; org-agenda-files must exist on disk, or dashboard's agenda widget hangs
+  ;; scanning for them (seen on a fresh machine missing this file).
+  (unless (file-exists-p my-inbox-file)
+    (make-empty-file my-inbox-file 'parents))
   (define-prefix-command 'my-org-mode-map)
   (keymap-set 'my-org-mode-map "a" #'org-agenda)
   (keymap-set 'my-org-mode-map "l" #'org-todo-list)
@@ -87,7 +91,8 @@ Prevents source blocks from auto-indenting when pressing Enter directly in the o
   ;; ensure expected directories exist (safe on new machines)
   (dolist (dir (list (expand-file-name my-notes-directory)
                      (expand-file-name "pages" my-notes-directory)
-                     (expand-file-name "projects" my-notes-directory)))
+                     (expand-file-name "projects" my-notes-directory)
+                     (expand-file-name "journal" my-notes-directory)))
     (make-directory dir t))
   ;; prompt for subdirectory (pages/ vs projects/) first when creating a note
   (setq denote-prompts '(subdirectory title keywords))
