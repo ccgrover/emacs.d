@@ -173,18 +173,25 @@
          )
   ;; use setq instead of :custom so we can just append to vector variables
   :config
-  (setq lsp-java-maven-download-sources nil
+  (setq lsp-java-maven-download-sources t
         ;; set to "verbose" for troubleshooting, otherwise "off"
         lsp-java-trace-server "off"
         ;; Workspace caching configuration
         lsp-java-workspace-cache-dir (expand-file-name ".cache/" lsp-java-workspace-dir)
         lsp-java-configuration-workspace-cache-limit 90  ; Keep cache for 90 days
         ;; Reduce auto-build overhead on startup
-        lsp-java-autobuild-enabled nil  ; Disable auto-build to reduce startup indexing
+        lsp-java-autobuild-enabled t
+        ;; Prevent target/generated-sources and unrelated Gradle projects from
+        ;; being imported as standalone Eclipse projects, which causes duplicate
+        ;; project name conflicts and .settings write failures
+        lsp-java-import-exclusions
+        ["**/node_modules/**" "**/.metadata/**" "**/archetype-resources/**"
+         "**/META-INF/maven/**"
+         "**/target/generated-sources/**"
+         "**/target/generated-test-sources/**"
+         "**/spotless/**"]
         ;; Generated sources handling
         ;; Exclude build artifacts and IDE files from workspace monitoring
-        ;; Note: Generated sources in target/generated-sources are still
-        ;; indexed via Maven configuration, just not actively watched
         lsp-java-project-resource-filters
         (vconcat '["node_modules" ".metadata" "archetype-resources" "META-INF/maven"
                    "target/classes" "target/test-classes" "target/maven-status"
@@ -256,7 +263,10 @@
                    "org.junit.jupiter.params.provider.Arguments.*"
                    "org.junit.jupiter.api.Named.named"
                    )
-                 lsp-java-completion-favorite-static-members)))
+                 lsp-java-completion-favorite-static-members))
+  ;; lsp-java names source-attachment buffers like "Foo.java(<pkg(Bar.class)"
+  ;; which doesn't end in .java, so auto-mode-alist's \.java\' won't match
+  (add-to-list 'auto-mode-alist '("\\.java(" . java-ts-mode)))
 
 (use-package dap-mode
   :after lsp-mode
