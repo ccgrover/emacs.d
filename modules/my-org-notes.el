@@ -92,6 +92,7 @@ Prevents source blocks from auto-indenting when pressing Enter directly in the o
   (dolist (dir (list (expand-file-name my-notes-directory)
                      (expand-file-name "pages" my-notes-directory)
                      (expand-file-name "projects" my-notes-directory)
+                     (expand-file-name "projects/archive" my-notes-directory)
                      (expand-file-name "journal" my-notes-directory)))
     (make-directory dir t))
   ;; prompt for subdirectory (pages/ vs projects/) first when creating a note
