@@ -98,7 +98,7 @@ Prevents source blocks from auto-indenting when pressing Enter directly in the o
   ;; prompt for subdirectory (pages/ vs projects/) first when creating a note
   (setq denote-prompts '(subdirectory title keywords))
   ;; also customize 'denote-known-keywords' for a controlled vocabulary for keywords
-  (setq denote-infer-keywords nil)
+  (setq denote-infer-keywords t)
   ;; scope agenda to project notes and inbox only (not permanent notes in pages/)
   (push (expand-file-name "projects" my-notes-directory) org-agenda-files)
   ;; Renames buffer to "[D] <title>", instead of the scary name
