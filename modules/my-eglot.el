@@ -67,7 +67,9 @@
               ("C-M-g"      . xref-find-implementations)
               ("C-<return>" . eglot-code-actions)
               ("C-c l r"    . eglot-rename)
-              ("C-c l f"    . eglot-format))
+              ("C-c l f"    . eglot-format)
+              ([C-down-mouse-1] . xref-find-definitions-at-mouse)
+              ([C-mouse-1]      . ignore))
   :custom
   (eglot-autoshutdown t)
   ;; Disable event logging; re-enable with M-x eglot-events-buffer when debugging
@@ -153,6 +155,32 @@
                     :maven ( :downloadSources t)
                     :format ( :enabled :json-false)
                     :trace ( :server "off")))))
+
+;; eglot-java's jdt:// URI handler regex only matches ".class?" but newer
+;; JDT-LS returns ".java?" when source is attached.  Override to handle both.
+(defun my/eglot-java--jdt-uri-handler (operation &rest args)
+  (let* ((uri (car args))
+         (cache-dir (expand-file-name ".eglot-java" (project-root (project-current t))))
+         (source-file
+          (expand-file-name
+           (eglot-java--make-path
+            cache-dir
+            (save-match-data
+              (when (string-match "jdt://contents/\\(.*?\\)/\\(.*\\)\\.\\(?:class\\|java\\)\\?" uri)
+                (format "%s.java"
+                        (replace-regexp-in-string "/" "." (match-string 2 uri) t t))))))))
+    (unless (file-readable-p source-file)
+      (let ((content (jsonrpc-request (eglot-java--find-server)
+                                      :java/classFileContents (list :uri uri)))
+            (metadata-file (format "%s.%s.metadata"
+                                   (file-name-directory source-file)
+                                   (file-name-base source-file))))
+        (unless (file-directory-p cache-dir) (make-directory cache-dir t))
+        (with-temp-file source-file (insert content))
+        (with-temp-file metadata-file (insert uri))))
+    source-file))
+
+(advice-add 'eglot-java--jdt-uri-handler :override #'my/eglot-java--jdt-uri-handler)
 
 ;; Bridge eglot's flymake diagnostics into flycheck
 (use-package flycheck-eglot

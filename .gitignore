@@ -40,3 +40,4 @@ workspace/
 .treemacs-persist
 eglot*/
 share/
+/projectile-frecency.eld
