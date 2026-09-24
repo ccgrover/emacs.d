@@ -6,7 +6,7 @@
 ;;  (require 'my-lsp) line in init.el for (require 'my-eglot).
 ;;
 ;;  Notable differences from lsp-mode:
-;;  - Diagnostics go through flymake; flycheck-eglot bridges them to flycheck.
+;;  - Diagnostics go through flymake natively (no flycheck).
 ;;  - Workspace config lives in `eglot-workspace-configuration` (not lsp-java vars).
 ;;  - consult-lsp is gone; use xref / consult-imenu instead.
 ;;  - eglot-java manages JDT-LS separately from lsp-java's install.
@@ -42,18 +42,13 @@
            (projectile-keymap-prefix (kbd "C-x p")))
   :config (projectile-mode +1))
 
-(use-package flycheck
-  :defer nil
-  :bind (("<f5>" . flycheck-buffer)
-         ("M-n"  . flycheck-next-error)
-         ("M-p"  . flycheck-previous-error))
-  :hook (flycheck-mode . flycheck-set-indication-mode)
-  :custom
-  (flycheck-indication-mode 'left-margin)
-  (flycheck-check-syntax-automatically '(save mode-enabled))
-  (flycheck-idle-change-delay 2.0)
-  (flycheck-idle-buffer-switch-delay 2.0)
-  :config (global-flycheck-mode))
+(use-package flymake
+  :ensure nil
+  :hook (prog-mode . flymake-mode)
+  :bind (:map flymake-mode-map
+              ("<f5>" . flymake-start)
+              ("M-n"  . flymake-goto-next-error)
+              ("M-p"  . flymake-goto-prev-error)))
 
 (use-package yasnippet
   :config (yas-global-mode))
@@ -182,10 +177,6 @@
 
 (advice-add 'eglot-java--jdt-uri-handler :override #'my/eglot-java--jdt-uri-handler)
 
-;; Bridge eglot's flymake diagnostics into flycheck
-(use-package flycheck-eglot
-  :after (flycheck eglot)
-  :config (global-flycheck-eglot-mode 1))
 
 ;; lsp-java named source-attachment buffers "Foo.java(<pkg>(Bar.class)"
 ;; which doesn't end in .java; eglot-java may do the same.
