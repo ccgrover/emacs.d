@@ -19,8 +19,20 @@ Update version number based on what I want to install
 #+end_src
 
 Fixing the Dark theme:
-- Install ~gnome-themes-extra~
-- Update ~Gnome Tweaks > Appearance > Legacy Applications > Adwaita-dark~
+
+The PGTK build (~emacs-pgtk~) uses GTK3, which does not automatically honour
+GNOME's ~color-scheme prefer-dark~ setting. Fix it by adding a GTK3 settings
+file:
+
+#+begin_src shell
+  mkdir -p ~/.config/gtk-3.0
+  cat >> ~/.config/gtk-3.0/settings.ini <<'EOF'
+  [Settings]
+  gtk-application-prefer-dark-theme=1
+  EOF
+#+end_src
+
+No extra packages required — Adwaita's dark variant is built into GTK3.
 
 ** ~org-mode~
 

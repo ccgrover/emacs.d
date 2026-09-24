@@ -93,10 +93,9 @@
 ;; (when (memq window-system '(mac ns x))
 ;;   (exec-path-from-shell-initialize)))
 
-;; recipe extraction!
+;; managing chezmoi dotfiles
 
-(use-package org-chef
-  :ensure t)
+(use-package chezmoi)
 
 (provide 'my-misc)
 ;;; my-misc.el ends here

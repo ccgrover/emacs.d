@@ -38,3 +38,5 @@ workspace/
 /tramp
 /.org-id-locations
 .treemacs-persist
+eglot*/
+share/
