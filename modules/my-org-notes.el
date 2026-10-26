@@ -91,16 +91,12 @@ Prevents source blocks from auto-indenting when pressing Enter directly in the o
   ;; ensure expected directories exist (safe on new machines)
   (dolist (dir (list (expand-file-name my-notes-directory)
                      (expand-file-name "pages" my-notes-directory)
-                     (expand-file-name "projects" my-notes-directory)
-                     (expand-file-name "projects/archive" my-notes-directory)
                      (expand-file-name "journal" my-notes-directory)))
     (make-directory dir t))
-  ;; prompt for subdirectory (pages/ vs projects/) first when creating a note
+  ;; prompt for subdirectory first when creating a note
   (setq denote-prompts '(subdirectory title keywords))
   ;; also customize 'denote-known-keywords' for a controlled vocabulary for keywords
   (setq denote-infer-keywords t)
-  ;; scope agenda to project notes and inbox only (not permanent notes in pages/)
-  (push (expand-file-name "projects" my-notes-directory) org-agenda-files)
   ;; Renames buffer to "[D] <title>", instead of the scary name
   (denote-rename-buffer-mode 1)
   (advice-add 'denote :around #'my/set-denote-dir))
