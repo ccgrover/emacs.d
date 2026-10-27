@@ -93,8 +93,7 @@ Prevents source blocks from auto-indenting when pressing Enter directly in the o
                      (expand-file-name "pages" my-notes-directory)
                      (expand-file-name "journal" my-notes-directory)))
     (make-directory dir t))
-  ;; prompt for subdirectory first when creating a note
-  (setq denote-prompts '(subdirectory title keywords))
+  (setq denote-prompts '(title keywords))
   ;; also customize 'denote-known-keywords' for a controlled vocabulary for keywords
   (setq denote-infer-keywords t)
   ;; Renames buffer to "[D] <title>", instead of the scary name
