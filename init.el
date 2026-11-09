@@ -72,6 +72,7 @@
 (require 'my-llm)
 (require 'my-dbt)
 (require 'my-terraform)
+(require 'my-http)
 
 ;; Enable downcase/upcase region commands
 (put 'downcase-region 'disabled nil)

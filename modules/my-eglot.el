@@ -56,13 +56,14 @@
 ;; ========== EGLOT ==========
 
 (use-package eglot
-  :ensure nil  ; built-in since Emacs 29
-  ;; No java hook here — eglot-java-mode handles registration and calls eglot-ensure.
+  :ensure nil   ; built-in since Emacs 29
+  :demand t     ; load immediately so :config runs and registers JDT-LS
   :bind (:map eglot-mode-map
               ("C-M-g"      . xref-find-implementations)
               ("C-<return>" . eglot-code-actions)
               ("C-c l r"    . eglot-rename)
               ("C-c l f"    . eglot-format)
+              ("C-c l i"    . eglot-find-implementation)
               ([C-down-mouse-1] . xref-find-definitions-at-mouse)
               ([C-mouse-1]      . ignore))
   :custom
@@ -75,34 +76,82 @@
   ;; Orderless style for eglot in-buffer completions
   (setf (alist-get 'styles (alist-get 'eglot completion-category-defaults))
         '(orderless))
-  ;; Bust stale completion caches (requires cape, loaded in my-completion.el)
-  (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster))
 
-(use-package eglot-java
-  :hook ((java-mode java-ts-mode) . eglot-java-mode)
-  :custom
-  ;; Where eglot-java installs JDT-LS (separate from any lsp-java install)
-  (eglot-java-server-install-dir (expand-file-name "eglot-java/" user-emacs-directory))
-  :config
-  ;; Override the full JVM args list; must re-include the --add-modules/--add-opens
-  ;; flags from the default value since we're replacing it entirely.
-  (setq eglot-java-eclipse-jdt-args
-        (append
-         '("-XX:+UseParallelGC"
-           "-XX:GCTimeRatio=4"
-           "-XX:AdaptiveSizePolicyWeight=90"
-           "-Dsun.zip.disableMemoryMapping=true"
-           "-Xmx8G"
-           "-Xms100m"
-           "-XX:+UseStringDeduplication"
-           "--add-modules=ALL-SYSTEM"
-           "--add-opens" "java.base/java.util=ALL-UNNAMED"
-           "--add-opens" "java.base/java.lang=ALL-UNNAMED")
-         (when my-lombok-path
-           (list (concat "-javaagent:" (expand-file-name my-lombok-path))))))
+  ;; ========== JDT-LS ==========
 
-  ;; JDTLS workspace configuration.  Keys mirror VS Code's java.* settings,
-  ;; nested as plists: (:java (:import (:exclusions [...]) ...)).
+  (defvar my/jdtls-jvm-args
+    (append
+     '("-XX:+UseParallelGC"
+       "-XX:GCTimeRatio=4"
+       "-XX:AdaptiveSizePolicyWeight=90"
+       "-Dsun.zip.disableMemoryMapping=true"
+       "-Xmx8G"
+       "-Xms100m"
+       "-XX:+UseStringDeduplication"
+       "--add-modules=ALL-SYSTEM"
+       "--add-opens" "java.base/java.util=ALL-UNNAMED"
+       "--add-opens" "java.base/java.lang=ALL-UNNAMED")
+     (when my-lombok-path
+       (list (concat "-javaagent:" (expand-file-name my-lombok-path))))))
+
+  (defclass my/jdtls (eglot-lsp-server) ()
+    :documentation "Eclipse JDT Language Server.")
+
+  (cl-defmethod eglot-initialization-options ((server my/jdtls))
+    `(:extendedClientCapabilities (:classFileContentsSupport t)
+      :workspaceFolders
+      [,@(cl-delete-duplicates
+          (mapcar #'eglot--path-to-uri
+                  (let* ((root (project-root (eglot--project server))))
+                    (cons root
+                          (mapcar #'file-name-directory
+                                  (append
+                                   (file-expand-wildcards (concat root "/*/pom.xml"))
+                                   (file-expand-wildcards (concat root "/*/build.gradle"))
+                                   (file-expand-wildcards (concat root "/*/build.gradle.kts"))
+                                   (file-expand-wildcards (concat root "*/.project")))))))
+          :test #'string=)]
+      ,@(when-let ((home (or (getenv "JAVA_HOME")
+                             (ignore-errors
+                               (expand-file-name ".."
+                                 (file-name-directory
+                                  (file-chase-links (executable-find "javac"))))))))
+          `(:settings (:java (:home ,home)
+                       :import (:gradle (:enabled t :wrapper (:enabled t))))))))
+
+  (cl-defmethod eglot-execute-command
+      ((_server my/jdtls) (_cmd (eql java.apply.workspaceEdit)) arguments)
+    "Eclipse JDT breaks spec and replies with edits as arguments."
+    (mapc #'eglot--apply-workspace-edit arguments))
+
+  (defun my/jdtls-contact (_interactive)
+    "Return the JDT-LS server contact for eglot."
+    (let* ((install-dir (expand-file-name "eglot-java/" user-emacs-directory))
+           (launcher    (car (file-expand-wildcards
+                              (expand-file-name "plugins/org.eclipse.equinox.launcher_*.jar"
+                                                install-dir))))
+           (config      (expand-file-name "config_linux" install-dir))
+           (workspace   (expand-file-name
+                         (md5 (project-root (project-current t)))
+                         (expand-file-name "eglot-java-eclipse-jdt-cache/" user-emacs-directory))))
+      (unless launcher (user-error "JDT-LS launcher not found in %s" install-dir))
+      (unless (file-directory-p workspace) (make-directory workspace t))
+      `(my/jdtls
+        ,(executable-find "java")
+        "-Declipse.application=org.eclipse.jdt.ls.core.id1"
+        "-Dosgi.bundles.defaultStartLevel=4"
+        "-Declipse.product=org.eclipse.jdt.ls.core.product"
+        ,@my/jdtls-jvm-args
+        "-jar" ,launcher
+        "-configuration" ,config
+        "-data" ,workspace)))
+
+  (add-to-list 'eglot-server-programs '((java-mode java-ts-mode) . my/jdtls-contact))
+
+  (add-hook 'java-mode-hook    #'eglot-ensure)
+  (add-hook 'java-ts-mode-hook #'eglot-ensure)
+
+  ;; JDTLS workspace configuration.  Keys mirror VS Code's java.* settings.
   (setq-default eglot-workspace-configuration
                 `(:java
                   ( :import
@@ -149,33 +198,31 @@
                     :autobuild ( :enabled t)
                     :maven ( :downloadSources t)
                     :format ( :enabled :json-false)
-                    :trace ( :server "off")))))
+                    :trace ( :server "off"))))
 
-;; eglot-java's jdt:// URI handler regex only matches ".class?" but newer
-;; JDT-LS returns ".java?" when source is attached.  Override to handle both.
-(defun my/eglot-java--jdt-uri-handler (operation &rest args)
-  (let* ((uri (car args))
-         (cache-dir (expand-file-name ".eglot-java" (project-root (project-current t))))
-         (source-file
-          (expand-file-name
-           (eglot-java--make-path
-            cache-dir
-            (save-match-data
-              (when (string-match "jdt://contents/\\(.*?\\)/\\(.*\\)\\.\\(?:class\\|java\\)\\?" uri)
-                (format "%s.java"
-                        (replace-regexp-in-string "/" "." (match-string 2 uri) t t))))))))
-    (unless (file-readable-p source-file)
-      (let ((content (jsonrpc-request (eglot-java--find-server)
-                                      :java/classFileContents (list :uri uri)))
-            (metadata-file (format "%s.%s.metadata"
-                                   (file-name-directory source-file)
-                                   (file-name-base source-file))))
-        (unless (file-directory-p cache-dir) (make-directory cache-dir t))
-        (with-temp-file source-file (insert content))
-        (with-temp-file metadata-file (insert uri))))
-    source-file))
+  ;; jdt:// URI handler; covers both .class? and .java? URIs from newer JDT-LS.
+  (defun my/jdtls-uri-handler (_operation &rest args)
+    (let* ((uri (car args))
+           (cache-dir (expand-file-name ".eglot-java" (project-root (project-current t))))
+           (source-file
+            (expand-file-name
+             (save-match-data
+               (when (string-match "jdt://contents/\\(.*?\\)/\\(.*\\)\\.\\(?:class\\|java\\)\\?" uri)
+                 (format "%s.java"
+                         (replace-regexp-in-string "/" "." (match-string 2 uri) t t))))
+             cache-dir)))
+      (unless (file-readable-p source-file)
+        (let ((content (jsonrpc-request (eglot-current-server)
+                                        :java/classFileContents (list :uri uri)))
+              (metadata-file (format "%s.%s.metadata"
+                                     (file-name-directory source-file)
+                                     (file-name-base source-file))))
+          (unless (file-directory-p cache-dir) (make-directory cache-dir t))
+          (with-temp-file source-file (insert content))
+          (with-temp-file metadata-file (insert uri))))
+      source-file))
 
-(advice-add 'eglot-java--jdt-uri-handler :override #'my/eglot-java--jdt-uri-handler)
+  (add-to-list 'file-name-handler-alist '("\\`jdt://" . my/jdtls-uri-handler)))
 
 
 ;; lsp-java named source-attachment buffers "Foo.java(<pkg>(Bar.class)"

@@ -18,7 +18,18 @@
    "/home/cgrover/tools/eclipseformatter/eclipse-java-google-style.xml")
  '(my-lombok-path "/home/cgrover/Tools/lombok/lombok.jar")
  '(org-fontify-quote-and-verse-blocks t)
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(aggressive-indent all-the-icons auctex auto-package-update cape
+                       chezmoi consult-denote corfu csv-mode dap-mode
+                       dashboard denote-journal dockerfile-mode
+                       ef-themes exec-path-from-shell gcmh gptel
+                       jinja2-mode kind-icon lsp-pyright magit
+                       marginalia mermaid-mode multiple-cursors
+                       orderless org-chef org-present ox-gfm
+                       page-break-lines plantuml-mode polymode request
+                       rg standard-themes terraform-mode
+                       treemacs-projectile treesit-auto verb vertico
+                       visual-fill-column vlf yaml-mode yasnippet))
  '(safe-local-variable-values
    '((eval setenv "JAVA_HOME" "~/.sdkman/candidates/java/17.0.16-tem"))))
 
