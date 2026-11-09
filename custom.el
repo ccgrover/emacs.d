@@ -22,7 +22,7 @@
    '(aggressive-indent all-the-icons auctex auto-package-update cape
                        chezmoi consult-denote corfu csv-mode dap-mode
                        dashboard denote-journal dockerfile-mode
-                       ef-themes exec-path-from-shell gcmh gptel
+                       ef-themes eglot exec-path-from-shell gcmh gptel
                        jinja2-mode kind-icon lsp-pyright magit
                        marginalia mermaid-mode multiple-cursors
                        orderless org-chef org-present ox-gfm

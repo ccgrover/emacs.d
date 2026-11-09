@@ -72,10 +72,23 @@
   (eglot-events-buffer-config '(:size 0 :format full))
   ;; Don't block Emacs while connecting
   (eglot-sync-connect nil)
+  (eglot-watch-files-outside-project-root nil)
   :config
   ;; Orderless style for eglot in-buffer completions
   (setf (alist-get 'styles (alist-get 'eglot completion-category-defaults))
         '(orderless))
+  (defvar my/eglot-watch-excluded-dirs
+    '("/\\.git\\(/\\|$\\)"
+      "/\\.venv\\(/\\|$\\)"
+      "/node_modules\\(/\\|$\\)"
+      "/target\\(/\\|$\\)"
+      "/\\.gradle\\(/\\|$\\)"
+      "/__pycache__\\(/\\|$\\)")
+    "Directory patterns excluded from eglot file watches.")
+
+  (define-advice file-notify-add-watch (:before-while (file _flags _callback) my/skip-noisy-watches)
+    (not (cl-some (lambda (re) (string-match-p re file))
+                  my/eglot-watch-excluded-dirs)))
 
   ;; ========== JDT-LS ==========
 
@@ -99,28 +112,28 @@
 
   (cl-defmethod eglot-initialization-options ((server my/jdtls))
     `(:extendedClientCapabilities (:classFileContentsSupport t)
-      :workspaceFolders
-      [,@(cl-delete-duplicates
-          (mapcar #'eglot--path-to-uri
-                  (let* ((root (project-root (eglot--project server))))
-                    (cons root
-                          (mapcar #'file-name-directory
-                                  (append
-                                   (file-expand-wildcards (concat root "/*/pom.xml"))
-                                   (file-expand-wildcards (concat root "/*/build.gradle"))
-                                   (file-expand-wildcards (concat root "/*/build.gradle.kts"))
-                                   (file-expand-wildcards (concat root "*/.project")))))))
-          :test #'string=)]
-      ,@(when-let ((home (or (getenv "JAVA_HOME")
-                             (ignore-errors
-                               (expand-file-name ".."
-                                 (file-name-directory
-                                  (file-chase-links (executable-find "javac"))))))))
-          `(:settings (:java (:home ,home)
-                       :import (:gradle (:enabled t :wrapper (:enabled t))))))))
+                                  :workspaceFolders
+                                  [,@(cl-delete-duplicates
+                                      (mapcar #'eglot--path-to-uri
+                                              (let* ((root (project-root (eglot--project server))))
+                                                (cons root
+                                                      (mapcar #'file-name-directory
+                                                              (append
+                                                               (file-expand-wildcards (concat root "/*/pom.xml"))
+                                                               (file-expand-wildcards (concat root "/*/build.gradle"))
+                                                               (file-expand-wildcards (concat root "/*/build.gradle.kts"))
+                                                               (file-expand-wildcards (concat root "*/.project")))))))
+                                      :test #'string=)]
+                                  ,@(when-let ((home (or (getenv "JAVA_HOME")
+                                                         (ignore-errors
+                                                           (expand-file-name ".."
+                                                                             (file-name-directory
+                                                                              (file-chase-links (executable-find "javac"))))))))
+                                      `(:settings (:java (:home ,home)
+                                                         :import (:gradle (:enabled t :wrapper (:enabled t))))))))
 
   (cl-defmethod eglot-execute-command
-      ((_server my/jdtls) (_cmd (eql java.apply.workspaceEdit)) arguments)
+    ((_server my/jdtls) (_cmd (eql java.apply.workspaceEdit)) arguments)
     "Eclipse JDT breaks spec and replies with edits as arguments."
     (mapc #'eglot--apply-workspace-edit arguments))
 
@@ -162,7 +175,8 @@
                        "**/META-INF/maven/**"
                        "**/target/generated-sources/**"
                        "**/target/generated-test-sources/**"
-                       "**/spotless/**"])
+                       "**/spotless/**"
+                       "**/.git/**"])
                     :configuration
                     ( :runtimes
                       [( :name "JavaSE-17"
