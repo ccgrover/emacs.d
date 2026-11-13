@@ -236,7 +236,22 @@
           (with-temp-file metadata-file (insert uri))))
       source-file))
 
-  (add-to-list 'file-name-handler-alist '("\\`jdt://" . my/jdtls-uri-handler)))
+  (add-to-list 'file-name-handler-alist '("\\`jdt://" . my/jdtls-uri-handler))
+
+  ;; When eglot converts a buffer in the jdt cache back to a URI for LSP requests,
+  ;; substitute the original jdt:// URI (saved in the .metadata file) so JDT-LS
+  ;; can resolve further navigation from decompiled sources.
+  (defun my/jdtls--path-to-uri (original-fn path &rest args)
+    (let ((metadata-file (expand-file-name
+                          (format ".%s.metadata" (file-name-base path))
+                          (file-name-directory path))))
+      (if (file-readable-p metadata-file)
+          (string-trim (with-temp-buffer
+                         (insert-file-contents metadata-file)
+                         (buffer-string)))
+        (apply original-fn path args))))
+
+  (advice-add 'eglot-path-to-uri :around #'my/jdtls--path-to-uri))
 
 
 ;; lsp-java named source-attachment buffers "Foo.java(<pkg>(Bar.class)"
